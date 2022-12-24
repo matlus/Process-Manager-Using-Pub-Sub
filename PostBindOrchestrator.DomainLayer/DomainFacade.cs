@@ -13,10 +13,7 @@ public sealed class DomainFacade : IDisposable
     {
     }
 
-    internal DomainFacade(ServiceLocatorBase serviceLocator)
-    {
-        this.serviceLocator = serviceLocator;
-    }
+    public DomainFacade(ServiceLocatorBase serviceLocator) => this.serviceLocator = serviceLocator;
 
     private PostBindOrchestrationManager PostBindOrchestrationManager
     {
@@ -25,9 +22,10 @@ public sealed class DomainFacade : IDisposable
             return postBindOrchestrationManager ??= new PostBindOrchestrationManager(serviceLocator);
         }
     }
-    public Task StartListening()
+
+    public Task StartListening(CancellationToken cancellationToken)
     {
-        return PostBindOrchestrationManager.StartListening();
+        return PostBindOrchestrationManager.StartListening(cancellationToken);
     }
 
     public Task ProcessPostBind(string correlationId, string policyNumber, string interviewData)

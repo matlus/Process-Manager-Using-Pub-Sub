@@ -7,7 +7,7 @@ namespace PostBindOrchestrator.Core;
 
 public sealed class SubscriberServiceBus : SubscriberBase
 {
-    private static readonly ServiceBusClientOptions serviceBusClientOptions = new ()
+    private static readonly ServiceBusClientOptions serviceBusClientOptions = new()
     {
         TransportType = ServiceBusTransportType.AmqpWebSockets
     };
@@ -15,7 +15,6 @@ public sealed class SubscriberServiceBus : SubscriberBase
     private bool disposed;
     private ServiceBusClient? serviceBusClient;
     private ServiceBusReceiver? serviceBusReceiver;
-    private readonly ConcurrentDictionary<string, ServiceBusReceivedMessage> concurrentDictionary = new ();
 
     protected override async Task InitializeCore(string connectionString, string topicName, string queueName)
     {
@@ -28,41 +27,23 @@ public sealed class SubscriberServiceBus : SubscriberBase
         serviceBusReceiver = serviceBusClient.CreateReceiver(TopicName, QueueName);
     }
 
-    protected override async Task SubscribeCore(Func<SubscriberBase, MessageReceivedEventArgs, Task> receiveCallback)
+    protected override async Task SubscribeCore(Func<SubscriberBase, MessageReceivedEventArgs, Task> receiveCallback, CancellationToken cancellationToken)
     {
-        await foreach(var serviceBusReceivedMessage in serviceBusReceiver!.ReceiveMessagesAsync())
+        await foreach (var serviceBusReceivedMessage in serviceBusReceiver!.ReceiveMessagesAsync(cancellationToken))
         {
-            concurrentDictionary.TryAdd(serviceBusReceivedMessage.LockToken, serviceBusReceivedMessage);
+            var messageType = GetHeaderValue(serviceBusReceivedMessage.ApplicationProperties, "MessageType");
+            var bytes = serviceBusReceivedMessage.Body.ToArray();
+            var brokerMessage = new BrokerMessage(messageType, bytes);
 
-            try
-            {
-                var messageType = GetHeaderValue(serviceBusReceivedMessage.ApplicationProperties, "MessageType");
-                var bytes = serviceBusReceivedMessage.Body.ToArray();
-                var brokerMessage = new BrokerMessage(messageType, bytes);
+            var messageReceivedEventArgs = new MessageReceivedEventArgs(brokerMessage, serviceBusReceivedMessage, new CancellationToken());
 
-                var messageReceivedEventArgs = new MessageReceivedEventArgs(brokerMessage, serviceBusReceivedMessage.LockToken, new CancellationToken());
-
-                await receiveCallback(this, messageReceivedEventArgs);
-            }
-            catch
-            {
-                DeleteMessageFromDictionary(serviceBusReceivedMessage.LockToken);
-                throw;
-            }
+            await receiveCallback(this, messageReceivedEventArgs);
         }
     }
 
-    protected override async Task AcknowledgeCore(string acknowledgetoken)
+    protected override async Task AcknowledgeCore(object acknowledgetoken, CancellationToken cancellationToken)
     {
-        if (concurrentDictionary.TryGetValue(acknowledgetoken, out var serviceBusReceivedMessage))
-        {
-            DeleteMessageFromDictionary(serviceBusReceivedMessage.LockToken);
-            await serviceBusReceiver!.CompleteMessageAsync(serviceBusReceivedMessage);
-
-            return;
-        }
-
-        throw new AcknowlegeTokenNotFoundException($"ServiceBusReceivedMessage was not found for the acknowlegement token: {acknowledgetoken}");
+        await serviceBusReceiver!.CompleteMessageAsync((ServiceBusReceivedMessage)acknowledgetoken, cancellationToken);
     }
 
     protected override async Task Dispose(bool disposing)
@@ -85,11 +66,6 @@ public sealed class SubscriberServiceBus : SubscriberBase
         {
             await serviceBusAdministrationClient.CreateSubscriptionAsync(TopicName, QueueName);
         }
-    }
-
-    private void DeleteMessageFromDictionary(string acknowledgetoken)
-    {
-        concurrentDictionary.Remove(acknowledgetoken, out _);
     }
 
     private static string GetHeaderValue(IReadOnlyDictionary<string, object> dictionary, string key)

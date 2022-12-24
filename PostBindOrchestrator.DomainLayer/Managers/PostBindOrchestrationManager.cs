@@ -30,10 +30,7 @@ internal sealed class PostBindOrchestrationManager : IDisposable
         }
     }
 
-    public PostBindOrchestrationManager(ServiceLocatorBase serviceLocator)
-    {
-        this.serviceLocator = serviceLocator;
-    }
+    public PostBindOrchestrationManager(ServiceLocatorBase serviceLocator) => this.serviceLocator = serviceLocator;
 
     public Task ProcessPostBind(string correlationId, string policyNumber, string interviewData)
     {
@@ -42,18 +39,15 @@ internal sealed class PostBindOrchestrationManager : IDisposable
         return Task.CompletedTask;
     }
 
-    public Task ProcessRevertToQuote(string correlationId, string policyNumber)
-    {
-        return Task.CompletedTask;
-    }
+    public Task ProcessRevertToQuote(string correlationId, string policyNumber) => Task.CompletedTask;
 
-    public async Task StartListening()
+    public async Task StartListening(CancellationToken cancellationToken)
     {
         var messageBrokerSettings = ConfigurationProvider.GetMessageBrokerSettings();
 
         subscriberOrchestrationReply = serviceLocator.CreateMessageBrokerSubscriber();
         await subscriberOrchestrationReply.Initialize(messageBrokerSettings.MessageBrokerConnectionString, OrchestrationReplyTopicName, OrchestrationReplyQueueName);
-        await subscriberOrchestrationReply.Subscribe(OnOrchestrationReplyMessageReceived);
+        await subscriberOrchestrationReply.Subscribe(OnOrchestrationReplyMessageReceived, cancellationToken);
 
         //// Start listening on the Exception Topic as well
     }
@@ -67,13 +61,13 @@ internal sealed class PostBindOrchestrationManager : IDisposable
         {
             orchestrationMessageReply = ApplicationSerializer.Deserialize<OrchestrationMessageReply>(brokerMessage.Body);
 
-            OrchestrationTask orchestrationTaskNext = GetNextOrchestrationTask(orchestrationMessageReply.PolicyNumber, orchestrationMessageReply.OrchestrationTask);
+            var orchestrationTaskNext = GetNextOrchestrationTask(orchestrationMessageReply.PolicyNumber, orchestrationMessageReply.OrchestrationTask);
             //// Publish message to trigger next task.
 
             //// Orchestrate the next Task (Publish OrchestrationTaskMessage to appropriate topic)
             //// Use OrchestrationTaskTopicDictionary to map task to topic
 
-            await subscriber.Acknowledge(messageReceivedEventArgs.AcknowledgeToken);            
+            await subscriber.Acknowledge(messageReceivedEventArgs.AcknowledgeToken, messageReceivedEventArgs.CancellationToken);
         }
         catch (MessageDeserializationFailedException e)
         {
@@ -87,7 +81,7 @@ internal sealed class PostBindOrchestrationManager : IDisposable
         }
     }
 
-    private OrchestrationTask GetNextOrchestrationTask(string policyNumber, OrchestrationTask orchestrationTask)
+    private static OrchestrationTask GetNextOrchestrationTask(string policyNumber, OrchestrationTask orchestrationTask)
     {
         // Of course some logic needs to be here
         return NextOrchestrationTaskEnumProvider.GetNext(orchestrationTask);

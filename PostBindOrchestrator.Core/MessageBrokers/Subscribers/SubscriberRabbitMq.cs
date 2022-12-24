@@ -29,7 +29,7 @@ public sealed class SubscriberRabbitMq : SubscriberBase
         return Task.CompletedTask;
     }
 
-    protected override Task SubscribeCore(Func<SubscriberBase, MessageReceivedEventArgs, Task> receiveCallback)
+    protected override Task SubscribeCore(Func<SubscriberBase, MessageReceivedEventArgs, Task> receiveCallback, CancellationToken cancellationToken)
     {
         var consumer = new EventingBasicConsumer(channel!);
 
@@ -38,7 +38,7 @@ public sealed class SubscriberRabbitMq : SubscriberBase
             var messageType = ea.BasicProperties.Type;
             var brokerMessage = new BrokerMessage(messageType, ea.Body.ToArray());
 
-            var messageReceivedEventArgs = new MessageReceivedEventArgs(brokerMessage, ea.DeliveryTag.ToString(), new CancellationToken());
+            var messageReceivedEventArgs = new MessageReceivedEventArgs(brokerMessage, ea.DeliveryTag, new CancellationToken());
 
             await receiveCallback(this, messageReceivedEventArgs);
         };
@@ -48,9 +48,9 @@ public sealed class SubscriberRabbitMq : SubscriberBase
         return Task.CompletedTask;
     }
 
-    protected override Task AcknowledgeCore(string acknowledgetoken)
+    protected override Task AcknowledgeCore(object acknowledgetoken, CancellationToken cancellationToken)
     {
-        channel!.BasicAck(ulong.Parse(acknowledgetoken), multiple: false);
+        channel!.BasicAck((ulong)acknowledgetoken, multiple: false);
 
         return Task.CompletedTask;
     }

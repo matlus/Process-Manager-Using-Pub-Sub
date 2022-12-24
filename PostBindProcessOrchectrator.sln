@@ -7,9 +7,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostBindOrchectrator.Api", 
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostBindOrchestrator.DomainLayer", "PostBindOrchestrator.DomainLayer\PostBindOrchestrator.DomainLayer.csproj", "{F80DA316-98E6-4820-8E9F-FC91424FE57F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostBindOrchestrator.Core", "PostBindOrchestrator.Core\PostBindOrchestrator.Core.csproj", "{9B5C7FF9-2990-4CB2-8FF7-1CED9EC3A7A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostBindOrchestrator.Core", "PostBindOrchestrator.Core\PostBindOrchestrator.Core.csproj", "{9B5C7FF9-2990-4CB2-8FF7-1CED9EC3A7A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestPublisher", "TestPublisher\TestPublisher.csproj", "{ACC63035-6475-49B3-9656-4FF0E917C47A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestPublisher", "TestPublisher\TestPublisher.csproj", "{ACC63035-6475-49B3-9656-4FF0E917C47A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{1C1B152A-B849-4B25-AD28-EE6054E71EAE}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

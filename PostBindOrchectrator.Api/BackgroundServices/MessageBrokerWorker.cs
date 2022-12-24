@@ -18,7 +18,7 @@ public sealed class MessageBrokerWorker : BackgroundService
     {
         try
         {
-            await domainFacade.StartListening();
+            await domainFacade.StartListening(stoppingToken);
         }
         catch (Exception e)
         {

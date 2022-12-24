@@ -19,10 +19,7 @@ public class ConfigurationProvider
     }
 
     [ExcludeFromCodeCoverage]
-    internal ConfigurationProvider(IConfigurationRoot configurationRoot)
-    {
-        this.configurationRoot = configurationRoot;
-    }
+    internal ConfigurationProvider(IConfigurationRoot configurationRoot) => this.configurationRoot = configurationRoot;
 
     private static void LoadEnvironmentSpecificAppSettings(ConfigurationBuilder configurationBuilder)
     {

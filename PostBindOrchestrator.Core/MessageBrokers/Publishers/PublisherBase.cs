@@ -5,10 +5,7 @@ public abstract class PublisherBase : IDisposable
     protected string? ConnectionString;
     protected string? TopicName;
 
-    public async Task Initialize(string connectionString, string topicName, string queueName)
-    {
-        await InitializeCore(connectionString, topicName, queueName);
-    }
+    public async Task Initialize(string connectionString, string topicName, string queueName) => await InitializeCore(connectionString, topicName, queueName);
 
     public async Task Publish<T>(T message, string messageId, string correlationId)
     {
@@ -28,10 +25,7 @@ public abstract class PublisherBase : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    protected static byte[] SerializeMessage<T>(T message)
-    {
-        return ApplicationSerializer.Serialize(message);
-    }
+    protected static byte[] SerializeMessage<T>(T message) => ApplicationSerializer.Serialize(message);
 
     protected abstract Task InitializeCore(string connectionString, string topicName, string queueName);
 

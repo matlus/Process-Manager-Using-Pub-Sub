@@ -5,19 +5,16 @@ public abstract class SubscriberBase : IDisposable
     protected string? TopicName;
     protected string? QueueName;
 
-    public Task Initialize(string connectionString, string topicName, string queueName)
+    public Task Initialize(string connectionString, string topicName, string queueName) => InitializeCore(connectionString, topicName, queueName);
+
+    public Task Subscribe(Func<SubscriberBase, MessageReceivedEventArgs, Task> receiveCallback, CancellationToken cancellationToken)
     {
-        return InitializeCore(connectionString, topicName, queueName);
+        return SubscribeCore(receiveCallback, cancellationToken);
     }
 
-    public Task Subscribe(Func<SubscriberBase, MessageReceivedEventArgs, Task> receiveCallback)
+    public Task Acknowledge(object acknowledgetoken, CancellationToken cancellationToken)
     {
-        return SubscribeCore(receiveCallback);
-    }
-
-    public Task Acknowledge(string acknowledgetoken)
-    {
-        return AcknowledgeCore(acknowledgetoken);
+        return AcknowledgeCore(acknowledgetoken, cancellationToken);
     }
 
     public void Dispose()
@@ -28,9 +25,9 @@ public abstract class SubscriberBase : IDisposable
 
     protected abstract Task InitializeCore(string connectionString, string topicName, string queueName);
 
-    protected abstract Task SubscribeCore(Func<SubscriberBase, MessageReceivedEventArgs, Task> receiveCallback);
+    protected abstract Task SubscribeCore(Func<SubscriberBase, MessageReceivedEventArgs, Task> receiveCallback, CancellationToken cancellationToken);
 
-    protected abstract Task AcknowledgeCore(string acknowledgetoken);
+    protected abstract Task AcknowledgeCore(object acknowledgetoken, CancellationToken cancellationToken);
 
     protected abstract Task Dispose(bool disposing);
 }

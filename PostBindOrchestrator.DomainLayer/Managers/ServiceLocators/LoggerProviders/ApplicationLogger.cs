@@ -9,10 +9,7 @@ public sealed partial class ApplicationLogger
 {
     private readonly ILogger logger;
 
-    public ApplicationLogger(ILogger logger)
-    {
-        this.logger = logger;
-    }
+    public ApplicationLogger(ILogger logger) => this.logger = logger;
 
     public void LogInformation(int eventId, string? message, params object?[] args)
     {

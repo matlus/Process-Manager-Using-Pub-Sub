@@ -35,20 +35,17 @@ public sealed partial class ApplicationLogger
 
         public int Count => keyValuePairs.Count;
 
-        public KeyValuePair<string, object> this[int index]
+        public KeyValuePair<string, object> this[int index] => index switch
         {
-            get => index switch
-            {
-                0 => keyValuePairs[0],
-                1 => keyValuePairs[1],
-                2 => keyValuePairs[2],
-                3 => keyValuePairs[3],
-                4 => keyValuePairs[4],
-                5 => keyValuePairs[5],
-                6 => keyValuePairs[6],
-                _ => throw new IndexOutOfRangeException(nameof(index)),
-            };
-        }
+            0 => keyValuePairs[0],
+            1 => keyValuePairs[1],
+            2 => keyValuePairs[2],
+            3 => keyValuePairs[3],
+            4 => keyValuePairs[4],
+            5 => keyValuePairs[5],
+            6 => keyValuePairs[6],
+            _ => throw new IndexOutOfRangeException(nameof(index)),
+        };
 
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
         {
