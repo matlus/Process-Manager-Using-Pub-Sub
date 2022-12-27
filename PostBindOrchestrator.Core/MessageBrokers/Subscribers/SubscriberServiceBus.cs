@@ -33,7 +33,7 @@ public sealed class SubscriberServiceBus : SubscriberBase
             var bytes = serviceBusReceivedMessage.Body.ToArray();
             var brokerMessage = new BrokerMessage(messageType, serviceBusReceivedMessage.CorrelationId, bytes);
 
-            var messageReceivedEventArgs = new MessageReceivedEventArgs(brokerMessage, serviceBusReceivedMessage, new CancellationToken());
+            var messageReceivedEventArgs = new MessageReceivedEventArgs(brokerMessage, serviceBusReceivedMessage, cancellationToken);
 
             await receiveCallback(this, messageReceivedEventArgs);
         }

@@ -38,7 +38,7 @@ public sealed class SubscriberRabbitMq : SubscriberBase
             var messageType = ea.BasicProperties.Type;
             var brokerMessage = new BrokerMessage(messageType, ea.BasicProperties.CorrelationId, ea.Body.ToArray());
 
-            var messageReceivedEventArgs = new MessageReceivedEventArgs(brokerMessage, ea.DeliveryTag, new CancellationToken());
+            var messageReceivedEventArgs = new MessageReceivedEventArgs(brokerMessage, ea.DeliveryTag, cancellationToken);
 
             await receiveCallback(this, messageReceivedEventArgs);
         };
