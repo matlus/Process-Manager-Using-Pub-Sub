@@ -52,7 +52,7 @@ public sealed class PublisherServiceBus : PublisherBase
         };
 
         serviceBusMessage.ApplicationProperties.Add("CreationDate", DateTimeOffset.UtcNow.ToString("o"));
-        serviceBusMessage.ApplicationProperties.Add("MessageType", messageType.GetType().Name);
+        serviceBusMessage.ApplicationProperties.Add("MessageType", messageType.Name);
 
         return serviceBusMessage;
     }

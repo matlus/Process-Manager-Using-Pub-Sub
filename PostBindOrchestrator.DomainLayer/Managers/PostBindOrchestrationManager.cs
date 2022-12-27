@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
+using Microsoft.Extensions.Logging;
 using PostBindOrchestrator.Core;
 
 namespace PostBindOrchestrator.DomainLayer;
@@ -34,12 +36,17 @@ internal sealed class PostBindOrchestrationManager : IDisposable
 
     public Task ProcessPostBind(string correlationId, string policyNumber, string interviewData)
     {
+        //// Validate formal arguments
         //// InterviewData needs to be a record type specified in this project. Use of string type is for demonstration purposes
         //// Should probably persist interview data in the database so Task Processors can access and simplifies "state" maintenace across threads (trigger and reply)
         return Task.CompletedTask;
     }
 
-    public Task ProcessRevertToQuote(string correlationId, string policyNumber) => Task.CompletedTask;
+    public Task ProcessRevertToQuote(string correlationId, string policyNumber)
+    {
+        //// Validate formal arguments
+        return Task.CompletedTask;
+    }
 
     public async Task StartListening(CancellationToken cancellationToken)
     {
@@ -56,14 +63,17 @@ internal sealed class PostBindOrchestrationManager : IDisposable
     {
         var brokerMessage = messageReceivedEventArgs.Message;
         OrchestrationMessageReply? orchestrationMessageReply = null;
+        var logEvent = LogEvent.OnOrchestrationReplyMessageReceived;
 
         try
         {
+            logEvent = LogEvent.DeSerializeReplyMessage;
             orchestrationMessageReply = ApplicationSerializer.Deserialize<OrchestrationMessageReply>(brokerMessage.Body);
 
             var orchestrationTaskNext = GetNextOrchestrationTask(orchestrationMessageReply.PolicyNumber, orchestrationMessageReply.OrchestrationTask);
-            //// Publish message to trigger next task.
 
+            logEvent = LogEvent.OnOrchestrationTaskStartPublish;
+            //// Publish message to trigger next task.
             //// Orchestrate the next Task (Publish OrchestrationTaskMessage to appropriate topic)
             //// Use OrchestrationTaskTopicDictionary to map task to topic
 
@@ -71,13 +81,11 @@ internal sealed class PostBindOrchestrationManager : IDisposable
         }
         catch (MessageDeserializationFailedException e)
         {
-            ApplicationLogger.LogError(LogEvent.OnOrchestrationReplyMessage, e, "{MessageType}, {Body}", brokerMessage.MessageType, Encoding.UTF8.GetString(brokerMessage.Body));
-            throw;
+            ApplicationLogger.LogError(logEvent, e, nameof(OnOrchestrationReplyMessageReceived), brokerMessage);
         }
         catch (Exception e)
         {
-            ApplicationLogger.LogError(LogEvent.OnOrchestrationReplyMessage, e, nameof(OnOrchestrationReplyMessageReceived), orchestrationMessageReply!);
-            throw;
+            ApplicationLogger.LogError(logEvent, e, nameof(OnOrchestrationReplyMessageReceived), orchestrationMessageReply!);
         }
     }
 

@@ -1,6 +1,7 @@
 using System.Globalization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Memory;
 using PostBindOrchestrator.Api;
 using PostBindOrchestrator.DomainLayer;
 
@@ -25,8 +26,9 @@ builder.Services.AddSingleton(sp =>
     return new DomainFacade(serviceLocator);
 });
 
-
 builder.Services.AddHostedService<MessageBrokerWorker>();
+
+builder.Services.AddScoped<CorrelationIdProvider>();
 
 var app = builder.Build();
 
@@ -39,7 +41,11 @@ app.Use(async (context, next) =>
 
     if (correlationIdHeaders.Any())
     {
-        context.Items["CorrelationId"] = correlationIdHeaders.First();
+        var corrleationId = correlationIdHeaders.First()!;
+        context.Items["CorrelationId"] = corrleationId;
+        var sp = context.RequestServices;
+        var correlationIdProvider = sp.GetRequiredService<CorrelationIdProvider>();
+        correlationIdProvider.CorrelationId = corrleationId;
     }
 
     await next(context);
@@ -60,3 +66,8 @@ app.MapGet("/processpostbind/{policyNumber}", postBindHandler.ProcessPostBind)
     .WithName("ProcessPostBind");
 
 app.Run();
+
+public sealed class CorrelationIdProvider
+{
+    public string? CorrelationId { get; set; }
+}

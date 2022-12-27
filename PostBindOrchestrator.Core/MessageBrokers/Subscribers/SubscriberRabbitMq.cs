@@ -36,7 +36,7 @@ public sealed class SubscriberRabbitMq : SubscriberBase
         consumer.Received += async (model, ea) =>
         {
             var messageType = ea.BasicProperties.Type;
-            var brokerMessage = new BrokerMessage(messageType, ea.Body.ToArray());
+            var brokerMessage = new BrokerMessage(messageType, ea.BasicProperties.CorrelationId, ea.Body.ToArray());
 
             var messageReceivedEventArgs = new MessageReceivedEventArgs(brokerMessage, ea.DeliveryTag, new CancellationToken());
 

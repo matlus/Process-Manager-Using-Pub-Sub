@@ -9,8 +9,8 @@ public sealed class PostBindRouteHandler
 
     public PostBindRouteHandler(DomainFacade domainFacade) => this.domainFacade = domainFacade;
 
-    public async Task ProcessPostBind(string policyNumber, [FromHeader(Name = "X-Correlation-Id")] string correlationId)
-    {
+    public async Task ProcessPostBind(string policyNumber, [FromHeader(Name = "X-Correlation-Id")] string correlationId, CorrelationIdProvider correlationIdProvider)
+    {        
         await domainFacade.ProcessPostBind(correlationId, policyNumber, "");
     }
 }

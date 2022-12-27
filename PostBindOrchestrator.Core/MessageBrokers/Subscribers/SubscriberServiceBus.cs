@@ -1,7 +1,5 @@
-﻿using System.Collections.Concurrent;
-using Azure.Messaging.ServiceBus;
+﻿using Azure.Messaging.ServiceBus;
 using Azure.Messaging.ServiceBus.Administration;
-using PostBindOrchestrator.DomainLayer;
 
 namespace PostBindOrchestrator.Core;
 
@@ -33,7 +31,7 @@ public sealed class SubscriberServiceBus : SubscriberBase
         {
             var messageType = GetHeaderValue(serviceBusReceivedMessage.ApplicationProperties, "MessageType");
             var bytes = serviceBusReceivedMessage.Body.ToArray();
-            var brokerMessage = new BrokerMessage(messageType, bytes);
+            var brokerMessage = new BrokerMessage(messageType, serviceBusReceivedMessage.CorrelationId, bytes);
 
             var messageReceivedEventArgs = new MessageReceivedEventArgs(brokerMessage, serviceBusReceivedMessage, new CancellationToken());
 

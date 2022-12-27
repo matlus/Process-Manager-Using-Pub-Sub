@@ -1,8 +1,6 @@
 ﻿using System.Runtime.Serialization;
-using PostBindOrchestrator.Core;
 
-namespace PostBindOrchestrator.DomainLayer;
-
+namespace PostBindOrchestrator.Core;
 
 [Serializable]
 public class MessageHeaderKeyNotFoundException : PostBindOrchestratorTechnicalBaseException
