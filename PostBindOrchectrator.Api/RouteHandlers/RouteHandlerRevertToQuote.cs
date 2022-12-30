@@ -2,11 +2,11 @@
 
 namespace PostBindOrchestrator.Api;
 
-internal class RevertToQuoteRouteHandler : RouteHandlerBase
+internal class RouteHandlerRevertToQuote : RouteHandlerBase
 {
     private readonly DomainFacade domainFacade;
 
-    public RevertToQuoteRouteHandler(DomainFacade domainFacade) => this.domainFacade = domainFacade;
+    public RouteHandlerRevertToQuote(DomainFacade domainFacade) => this.domainFacade = domainFacade;
 
     protected sealed override void MapRoutesCore(IEndpointRouteBuilder endpointRouteBuilder)
     {

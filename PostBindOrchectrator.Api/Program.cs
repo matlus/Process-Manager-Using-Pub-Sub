@@ -1,4 +1,5 @@
 using PostBindOrchestrator.Api;
+using PostBindOrchestrator.Api.ApplicationBuilderExtensions;
 using PostBindOrchestrator.DomainLayer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -26,8 +27,8 @@ builder.Services.AddSingleton(sp =>
 builder.Services.AddHostedService<MessageBrokerWorker>();
 
 builder.Services.AddScoped<CorrelationIdProvider>();
-builder.Services.AddSingleton<PostBindRouteHandler>();
-builder.Services.AddSingleton<RevertToQuoteRouteHandler>();
+builder.Services.AddSingleton<RouteHandlerPostBind>();
+builder.Services.AddSingleton<RouteHandlerRevertToQuote>();
 
 var app = builder.Build();
 

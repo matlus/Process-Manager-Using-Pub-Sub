@@ -2,11 +2,11 @@
 
 namespace PostBindOrchestrator.Api;
 
-internal class PostBindRouteHandler : RouteHandlerBase
+internal class RouteHandlerPostBind : RouteHandlerBase
 {
     private readonly DomainFacade domainFacade;
 
-    public PostBindRouteHandler(DomainFacade domainFacade) => this.domainFacade = domainFacade;
+    public RouteHandlerPostBind(DomainFacade domainFacade) => this.domainFacade = domainFacade;
 
     protected sealed override void MapRoutesCore(IEndpointRouteBuilder endpointRouteBuilder)
     {

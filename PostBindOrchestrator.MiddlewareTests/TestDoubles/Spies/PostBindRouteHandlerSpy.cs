@@ -4,7 +4,7 @@ using PostBindOrchestrator.DomainLayer;
 
 namespace PostBindOrchestrator.MiddlewareTests;
 
-internal sealed class PostBindRouteHandlerSpy : PostBindRouteHandler, ITestMediatorCompositor
+internal sealed class PostBindRouteHandlerSpy : RouteHandlerPostBind, ITestMediatorCompositor
 {
     private readonly TestMediator testMediator;
     public TestMediator TestMediator => testMediator;
