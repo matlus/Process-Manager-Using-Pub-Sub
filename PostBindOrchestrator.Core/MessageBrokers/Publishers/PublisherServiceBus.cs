@@ -8,7 +8,7 @@ public sealed class PublisherServiceBus : PublisherBase
     private ServiceBusClient? serviceBusClient;
     private ServiceBusSender? serviceBusSender;
 
-    private static readonly ServiceBusClientOptions serviceBusClientOptions = new ()
+    private static readonly ServiceBusClientOptions serviceBusClientOptions = new()
     {
         TransportType = ServiceBusTransportType.AmqpWebSockets
     };
@@ -48,7 +48,7 @@ public sealed class PublisherServiceBus : PublisherBase
         {
             MessageId = messageId,
             CorrelationId = correlationId,
-            ContentType = "application/json"            
+            ContentType = "application/json"
         };
 
         serviceBusMessage.ApplicationProperties.Add("CreationDate", DateTimeOffset.UtcNow.ToString("o"));

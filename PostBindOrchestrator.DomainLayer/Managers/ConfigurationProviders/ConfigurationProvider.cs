@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using PostBindOrchestrator.Core;
 using Microsoft.Extensions.Configuration;
+using PostBindOrchestrator.Core;
 
 namespace PostBindOrchestrator.DomainLayer;
 
@@ -83,7 +83,6 @@ public class ConfigurationProvider
 
         return applicationInsightsSettingsConfig;
     }
-
 
     private MessageBrokerType GetMessageBrokerType()
     {

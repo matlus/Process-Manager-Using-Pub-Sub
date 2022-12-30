@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33122.133
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostBindOrchectrator.Api", "PostBindOrchectrator.Api\PostBindOrchectrator.Api.csproj", "{411A8C9D-02C9-46FC-8D7B-2C161D62259A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostBindOrchestrator.Api", "PostBindOrchectrator.Api\PostBindOrchestrator.Api.csproj", "{411A8C9D-02C9-46FC-8D7B-2C161D62259A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostBindOrchestrator.DomainLayer", "PostBindOrchestrator.DomainLayer\PostBindOrchestrator.DomainLayer.csproj", "{F80DA316-98E6-4820-8E9F-FC91424FE57F}"
 EndProject
@@ -15,6 +15,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 	ProjectSection(SolutionItems) = preProject
 		.editorconfig = .editorconfig
 	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{638B2EEF-6623-4346-9D43-1C1AEBC536DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PostBindOrchestrator.MiddlewareTests", "PostBindOrchestrator.MiddlewareTests\PostBindOrchestrator.MiddlewareTests.csproj", "{942E46A3-0784-4F27-A8DA-A612680FCF2B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,9 +42,16 @@ Global
 		{ACC63035-6475-49B3-9656-4FF0E917C47A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACC63035-6475-49B3-9656-4FF0E917C47A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACC63035-6475-49B3-9656-4FF0E917C47A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{942E46A3-0784-4F27-A8DA-A612680FCF2B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{942E46A3-0784-4F27-A8DA-A612680FCF2B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{942E46A3-0784-4F27-A8DA-A612680FCF2B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{942E46A3-0784-4F27-A8DA-A612680FCF2B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{942E46A3-0784-4F27-A8DA-A612680FCF2B} = {638B2EEF-6623-4346-9D43-1C1AEBC536DE}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {AC4392D4-63E1-410B-8178-0E811EE9EA41}

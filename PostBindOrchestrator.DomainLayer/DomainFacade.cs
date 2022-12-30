@@ -28,7 +28,7 @@ public sealed class DomainFacade : IDisposable
         return PostBindOrchestrationManager.StartListening(cancellationToken);
     }
 
-    public Task ProcessPostBind(string correlationId, string policyNumber, string interviewData)
+    public Task ProcessPostBind(string correlationId, string policyNumber, InterviewData interviewData)
     {
         return PostBindOrchestrationManager.ProcessPostBind(correlationId, policyNumber, interviewData);
     }
@@ -37,7 +37,6 @@ public sealed class DomainFacade : IDisposable
     {
         return PostBindOrchestrationManager.ProcessRevertToQuote(correlationId, policyNumber);
     }
-
 
     public void Dispose()
     {

@@ -13,7 +13,7 @@ internal sealed class LoggerProvider : IDisposable
 {
     private readonly ILoggerFactory loggerFactory;
     private readonly ITelemetryChannel telemetryChannel;
-    private readonly ConcurrentDictionary<string, ILogger> loggersDictionary = new ();
+    private readonly ConcurrentDictionary<string, ILogger> loggersDictionary = new();
     private readonly string eventLogName;
 
     private bool disposed;

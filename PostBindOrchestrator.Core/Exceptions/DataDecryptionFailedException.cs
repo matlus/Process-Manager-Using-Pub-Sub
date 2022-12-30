@@ -11,12 +11,12 @@ public sealed class DataDecryptionFailedException : PostBindOrchestratorTechnica
     {
     }
 
-    public DataDecryptionFailedException(string message) 
+    public DataDecryptionFailedException(string message)
         : base(message)
     {
     }
 
-    public DataDecryptionFailedException(string message, Exception innerException) 
+    public DataDecryptionFailedException(string message, Exception innerException)
         : base(message, innerException)
     {
     }

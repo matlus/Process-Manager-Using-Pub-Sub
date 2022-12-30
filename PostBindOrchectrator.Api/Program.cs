@@ -7,6 +7,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddSingleton<ServiceLocatorBase, ServiceLocator>();
 
@@ -25,27 +26,14 @@ builder.Services.AddSingleton(sp =>
 builder.Services.AddHostedService<MessageBrokerWorker>();
 
 builder.Services.AddScoped<CorrelationIdProvider>();
+builder.Services.AddSingleton<PostBindRouteHandler>();
+builder.Services.AddSingleton<RevertToQuoteRouteHandler>();
 
 var app = builder.Build();
 
-
 // Configure the HTTP request pipeline.
-
-app.Use(async (context, next) =>
-{
-    var correlationIdHeaders = context.Request.Headers["X-Correlation-Id"];
-
-    if (correlationIdHeaders.Any())
-    {
-        var corrleationId = correlationIdHeaders.First()!;
-        context.Items["CorrelationId"] = corrleationId;
-        var sp = context.RequestServices;
-        var correlationIdProvider = sp.GetRequiredService<CorrelationIdProvider>();
-        correlationIdProvider.CorrelationId = corrleationId;
-    }
-
-    await next(context);
-});
+app.UseExceptionHandling();
+app.UseCorrelationIdInitializer();
 
 if (app.Environment.IsDevelopment())
 {
@@ -54,16 +42,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
-
-var domainFacade = app.Services.GetRequiredService<DomainFacade>();
-var postBindHandler = new PostBindRouteHandler(domainFacade);
-
-app.MapGet("/processpostbind/{policyNumber}", postBindHandler.ProcessPostBind)
-    .WithName("ProcessPostBind");
+app.MapRoutesForRouteHandlers();
 
 app.Run();
 
-public sealed class CorrelationIdProvider
-{
-    public string? CorrelationId { get; set; }
-}
+public partial class Program { }

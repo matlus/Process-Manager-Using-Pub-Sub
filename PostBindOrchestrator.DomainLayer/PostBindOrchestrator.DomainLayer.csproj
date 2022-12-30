@@ -26,8 +26,4 @@
     <ProjectReference Include="..\PostBindOrchestrator.Core\PostBindOrchestrator.Core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Managers\Models\" />
-  </ItemGroup>
-
 </Project>

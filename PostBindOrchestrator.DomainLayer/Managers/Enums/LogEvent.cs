@@ -1,7 +1,8 @@
 ﻿namespace PostBindOrchestrator.DomainLayer;
 public enum LogEvent
 {
-    OnStartListening,    
+    Middleware,
+    OnStartListening,
     OnOrchestrationReplyMessageReceived,
     DeSerializeReplyMessage,
     OnOrchestrationTaskStartPublish,

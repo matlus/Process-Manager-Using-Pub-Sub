@@ -1,6 +1,6 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Logging;
 using PostBindOrchestrator.Core;
-using System.Diagnostics.CodeAnalysis;
 
 namespace PostBindOrchestrator.DomainLayer;
 
@@ -38,6 +38,16 @@ public sealed partial class ApplicationLogger
         {
 #pragma warning disable CA2254 // Template should be a static expression
             logger.LogError((int)logEvent, exception, message, param1, param2, param3, param4, param5);
+#pragma warning restore CA2254 // Template should be a static expression
+        }
+    }
+
+    public void LogError<T1, T2, T3, T4, T5, T6>(LogEvent logEvent, Exception exception, string? message, T1 param1, T2 param2, T3 param3, T4 param4, T5 param5, T6 param6)
+    {
+        if (logger.IsEnabled(LogLevel.Error))
+        {
+#pragma warning disable CA2254 // Template should be a static expression
+            logger.LogError((int)logEvent, exception, message, param1, param2, param3, param4, param5, param6);
 #pragma warning restore CA2254 // Template should be a static expression
         }
     }

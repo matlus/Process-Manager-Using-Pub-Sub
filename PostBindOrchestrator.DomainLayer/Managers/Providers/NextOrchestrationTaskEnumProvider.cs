@@ -10,7 +10,7 @@ internal sealed class NextOrchestrationTaskEnumProvider
     {
         var currentIndex = Array.IndexOf(orchestrationTasks, orchestrationTask.ToString());
 
-        if (currentIndex == -1 || currentIndex == orchestrationTasks.Length -1)
+        if (currentIndex == -1 || currentIndex == orchestrationTasks.Length - 1)
         {
             return OrchestrationTask.None;
         }

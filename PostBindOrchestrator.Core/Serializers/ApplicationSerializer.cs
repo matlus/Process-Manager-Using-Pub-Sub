@@ -6,7 +6,7 @@ namespace PostBindOrchestrator.Core;
 
 public static class ApplicationSerializer
 {
-    private static readonly JsonSerializerOptions jsonSerializerOptions = new ()
+    private static readonly JsonSerializerOptions jsonSerializerOptions = new()
     {
         PropertyNameCaseInsensitive = true,
         Converters = { new JsonStringEnumConverter() }

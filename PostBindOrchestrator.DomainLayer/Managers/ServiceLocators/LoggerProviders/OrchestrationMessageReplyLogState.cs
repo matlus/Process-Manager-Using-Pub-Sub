@@ -1,6 +1,6 @@
-﻿using PostBindOrchestrator.Core;
-using System.Collections;
+﻿using System.Collections;
 using System.Text;
+using PostBindOrchestrator.Core;
 
 namespace PostBindOrchestrator.DomainLayer;
 
@@ -73,6 +73,6 @@ public sealed partial class ApplicationLogger
             return (exception != null)
                 ? orchestrationMessageReplyLogState.ToString() + $" Original Exception Type: {exception.GetType().Name}, with message: {exception.Message}"
                 : orchestrationMessageReplyLogState.ToString();
-        }        
+        }
     }
 }

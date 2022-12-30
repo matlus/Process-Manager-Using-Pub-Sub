@@ -31,10 +31,9 @@ internal sealed class PostBindOrchestrationManager : IDisposable
 
     public PostBindOrchestrationManager(ServiceLocatorBase serviceLocator) => this.serviceLocator = serviceLocator;
 
-    public Task ProcessPostBind(string correlationId, string policyNumber, string interviewData)
+    public Task ProcessPostBind(string correlationId, string policyNumber, InterviewData interviewData)
     {
         //// Validate formal arguments
-        //// InterviewData needs to be a record type specified in this project. Use of string type is for demonstration purposes
         //// Should probably persist interview data in the database so Task Processors can access and simplifies "state" maintenace across threads (trigger and reply)
         return Task.CompletedTask;
     }

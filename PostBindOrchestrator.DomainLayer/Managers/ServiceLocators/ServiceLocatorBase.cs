@@ -1,5 +1,5 @@
-﻿using PostBindOrchestrator.Core;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using PostBindOrchestrator.Core;
 
 namespace PostBindOrchestrator.DomainLayer;
 
