@@ -10,7 +10,7 @@ internal class RouteHandlerRevertToQuote : RouteHandlerBase
 
     protected sealed override void MapRoutesCore(IEndpointRouteBuilder endpointRouteBuilder)
     {
-        MapPostEndpoint(endpointRouteBuilder, "/processreverttoquote/{policyNumber}", "ProcessRevertToQuote", ProcessRevertToQuote);        
+        MapPostEndpoint(endpointRouteBuilder, "/processreverttoquote/{policyNumber}", "ProcessRevertToQuote", ProcessRevertToQuote);
     }
 
     public async Task ProcessRevertToQuote(CorrelationIdProvider correlationIdProvider, string policyNumber)
