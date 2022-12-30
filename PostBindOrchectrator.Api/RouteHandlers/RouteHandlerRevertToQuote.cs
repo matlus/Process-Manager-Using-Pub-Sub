@@ -23,4 +23,3 @@ internal class RouteHandlerRevertToQuote : RouteHandlerBase
         return domainFacade.ProcessRevertToQuote(correlationId, policyNumber);
     }
 }
-
