@@ -6,11 +6,8 @@ public static class HttpStatusCodeParser
 {
     public static HttpStatusCode ParseElseException(string httpStatusCodeAsString)
     {
-        if (Enum.TryParse<HttpStatusCode>(httpStatusCodeAsString, out var httpStatusCode))
-        {
-            return httpStatusCode;
-        }
-
-        throw new HttpStatusCodeParseException($"Failed to parse http status code type from string with value: {httpStatusCodeAsString}");
+        return Enum.TryParse<HttpStatusCode>(httpStatusCodeAsString, out var httpStatusCode)
+            ? httpStatusCode
+            : throw new HttpStatusCodeParseException($"Failed to parse http status code type from string with value: {httpStatusCodeAsString}");
     }
 }

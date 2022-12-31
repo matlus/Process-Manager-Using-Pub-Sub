@@ -36,7 +36,7 @@ public static class ApplicationSerializer
 
         try
         {
-            return (JsonSerializer.Deserialize<T>(bytesAsString, jsonSerializerOptions))!;
+            return JsonSerializer.Deserialize<T>(bytesAsString, jsonSerializerOptions)!;
         }
         catch (JsonException e)
         {
@@ -51,7 +51,7 @@ public static class ApplicationSerializer
     {
         try
         {
-            return (JsonSerializer.Deserialize<T>(jsonString, jsonSerializerOptions))!;
+            return JsonSerializer.Deserialize<T>(jsonString, jsonSerializerOptions)!;
         }
         catch (JsonException e)
         {

@@ -11,9 +11,9 @@ public class ConfigurationProvider
     public ConfigurationProvider()
     {
         var configurationBuilder = new ConfigurationBuilder();
-        configurationBuilder.AddJsonFile("appsettings.json");
+        _ = configurationBuilder.AddJsonFile("appsettings.json");
         LoadEnvironmentSpecificAppSettings(configurationBuilder);
-        configurationBuilder.AddEnvironmentVariables("PostBindOrc_");
+        _ = configurationBuilder.AddEnvironmentVariables("PostBindOrc_");
 
         configurationRoot = configurationBuilder.Build();
     }
@@ -26,7 +26,7 @@ public class ConfigurationProvider
         var aspNetCoreEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         if (aspNetCoreEnvironment is not null)
         {
-            configurationBuilder.AddJsonFile($"appsettings.{aspNetCoreEnvironment}.json");
+            _ = configurationBuilder.AddJsonFile($"appsettings.{aspNetCoreEnvironment}.json");
         }
     }
 

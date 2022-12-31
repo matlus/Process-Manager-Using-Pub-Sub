@@ -61,7 +61,7 @@ public sealed partial class ApplicationLogger
         {
             var errorLogString = new StringBuilder();
 
-            errorLogString.AppendLine($"Error Log from Method: `{MethodName}`, CorrelationId: `{BrokerMessage.CorrelationId}`," +
+            _ = errorLogString.AppendLine($"Error Log from Method: `{MethodName}`, CorrelationId: `{BrokerMessage.CorrelationId}`," +
                 $"MessageType: `{BrokerMessage.MessageType}`, Body: `{MessageBody}`");
 
             return errorLogString.ToString();

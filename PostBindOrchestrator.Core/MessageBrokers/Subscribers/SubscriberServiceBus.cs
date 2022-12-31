@@ -62,17 +62,14 @@ public sealed class SubscriberServiceBus : SubscriberBase
 
         if (!subscriptionExists)
         {
-            await serviceBusAdministrationClient.CreateSubscriptionAsync(TopicName, QueueName);
+            _ = await serviceBusAdministrationClient.CreateSubscriptionAsync(TopicName, QueueName);
         }
     }
 
     private static string GetHeaderValue(IReadOnlyDictionary<string, object> dictionary, string key)
     {
-        if (dictionary.TryGetValue(key, out var value))
-        {
-            return (string)value;
-        }
-
-        throw new MessageHeaderKeyNotFoundException($"The Message Header with Key: {key}, was Not Found in the Collection of Headers");
+        return dictionary.TryGetValue(key, out var value)
+            ? (string)value
+            : throw new MessageHeaderKeyNotFoundException($"The Message Header with Key: {key}, was Not Found in the Collection of Headers");
     }
 }

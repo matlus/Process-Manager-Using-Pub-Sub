@@ -6,16 +6,15 @@ namespace PostBindOrchestrator.MiddlewareTests;
 
 internal sealed class RouteHandlerPostBindSpy : RouteHandlerPostBind, ITestMediatorCompositor
 {
-    private readonly TestMediator testMediator;
-    public TestMediator TestMediator => testMediator;
+    public TestMediator TestMediator { get; }
 
-    public RouteHandlerPostBindSpy(DomainFacade domainFacade) : base(domainFacade) => testMediator = new TestMediator();
+    public RouteHandlerPostBindSpy(DomainFacade domainFacade) : base(domainFacade) => TestMediator = new TestMediator();
 
     protected override Task ProcessPostBindCore(string correlationId, string policyNumber, InterviewData interviewData)
     {
-        testMediator.CorrelationId = correlationId;
-        testMediator.PolicyNumber = policyNumber;
-        testMediator.InterviewData = interviewData;
+        TestMediator.CorrelationId = correlationId;
+        TestMediator.PolicyNumber = policyNumber;
+        TestMediator.InterviewData = interviewData;
         return Task.CompletedTask;
     }
 }

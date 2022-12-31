@@ -5,15 +5,14 @@ using PostBindOrchestrator.DomainLayer;
 namespace PostBindOrchestrator.MiddlewareTests;
 internal sealed class RouteHandlerRevertToQuoteSpy : RouteHandlerRevertToQuote, ITestMediatorCompositor
 {
-    private readonly TestMediator testMediator;
-    public TestMediator TestMediator => testMediator;
+    public TestMediator TestMediator { get; }
 
-    public RouteHandlerRevertToQuoteSpy(DomainFacade domainFacade) : base(domainFacade) => testMediator = new TestMediator();
+    public RouteHandlerRevertToQuoteSpy(DomainFacade domainFacade) : base(domainFacade) => TestMediator = new TestMediator();
 
     protected override Task ProcessRevertToQuoteCore(string correlationId, string policyNumber)
     {
-        testMediator.CorrelationId = correlationId;
-        testMediator.PolicyNumber = policyNumber;
+        TestMediator.CorrelationId = correlationId;
+        TestMediator.PolicyNumber = policyNumber;
         return Task.CompletedTask;
     }
 }

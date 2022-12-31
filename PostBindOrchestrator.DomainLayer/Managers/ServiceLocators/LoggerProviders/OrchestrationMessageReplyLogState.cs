@@ -61,7 +61,7 @@ public sealed partial class ApplicationLogger
         {
             var errorLogString = new StringBuilder();
 
-            errorLogString.AppendLine($"Error Log from Method: `{MethodName}`, CorrelationId: `{OrchestrationMessageReply.CorrelationId}`," +
+            _ = errorLogString.AppendLine($"Error Log from Method: `{MethodName}`, CorrelationId: `{OrchestrationMessageReply.CorrelationId}`," +
                 $"Policy Number: `{OrchestrationMessageReply.PolicyNumber}`, Orchestration Task: `{OrchestrationMessageReply.OrchestrationTask}`, " +
                 $"Create On: `{OrchestrationMessageReply.TaskStage}`");
 

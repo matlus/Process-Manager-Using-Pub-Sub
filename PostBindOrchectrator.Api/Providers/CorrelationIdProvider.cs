@@ -12,12 +12,9 @@ public sealed class CorrelationIdProvider
     {
         get
         {
-            if (httpContext.Items.TryGetValue("CorrelationId", out object? value))
-            {
-                return (string)value!;
-            }
-
-            throw new CorrelationIdNotProvidedException("Correlation Id was Not Provided in the HTTP Header `X-Correlation-Id`. An attempt was made to access this value, but no Header was found");
+            return httpContext.Items.TryGetValue("CorrelationId", out var value)
+                ? (string)value!
+                : throw new CorrelationIdNotProvidedException("Correlation Id was Not Provided in the HTTP Header `X-Correlation-Id`. An attempt was made to access this value, but no Header was found");
         }
     }
 }

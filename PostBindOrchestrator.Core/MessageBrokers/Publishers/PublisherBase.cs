@@ -21,7 +21,7 @@ public abstract class PublisherBase : IDisposable
 
     public void Dispose()
     {
-        Dispose(true);
+        _ = Dispose(true);
         GC.SuppressFinalize(this);
     }
 

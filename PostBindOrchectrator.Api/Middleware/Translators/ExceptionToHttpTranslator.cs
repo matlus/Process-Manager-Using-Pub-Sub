@@ -44,11 +44,6 @@ public static class ExceptionToHttpTranslator
         //// If we have a "Not Found" type of exception, for example Policy Not Found
         //// we need to have a condition for that in order to return a 404 status code
 
-        if (exception is PostBindOrchestratorBusinessBaseException)
-        {
-            return 400;
-        }
-
-        return 500;
+        return exception is PostBindOrchestratorBusinessBaseException ? 400 : 500;
     }
 }

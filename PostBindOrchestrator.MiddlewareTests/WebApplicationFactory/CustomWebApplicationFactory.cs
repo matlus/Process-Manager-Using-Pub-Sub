@@ -10,15 +10,15 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureServices(services => ReplaceService<RouteHandlerPostBind, RouteHandlerPostBindSpy>(services));
-        builder.ConfigureServices(services => ReplaceService<RouteHandlerRevertToQuote, RouteHandlerRevertToQuoteSpy>(services));
+        _ = builder.ConfigureServices(services => ReplaceService<RouteHandlerPostBind, RouteHandlerPostBindSpy>(services));
+        _ = builder.ConfigureServices(services => ReplaceService<RouteHandlerRevertToQuote, RouteHandlerRevertToQuoteSpy>(services));
     }
 
     private static void ReplaceService<TBase, TImplementation>(IServiceCollection serviceCollection) where TBase : class
                                                                                                      where TImplementation : class, TBase
     {
         var serviceDescriptor = serviceCollection.Single(d => d.ServiceType == typeof(TBase));
-        serviceCollection.Remove(serviceDescriptor);
-        serviceCollection.AddSingleton<TBase, TImplementation>();
+        _ = serviceCollection.Remove(serviceDescriptor);
+        _ = serviceCollection.AddSingleton<TBase, TImplementation>();
     }
 }
