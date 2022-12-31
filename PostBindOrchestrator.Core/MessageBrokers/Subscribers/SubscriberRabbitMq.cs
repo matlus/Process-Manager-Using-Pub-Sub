@@ -20,7 +20,7 @@ public sealed class SubscriberRabbitMq : SubscriberBase
         connection = connectionFactory.CreateConnection();
         channel = connection.CreateModel();
 
-        _ = channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: false);
+        channel.QueueDeclare(queueName, durable: true, exclusive: false, autoDelete: false);
         channel.QueueBind(queueName, topicName, routingKey: string.Empty, arguments: null);
 
         channel.BasicQos(prefetchSize: 0, prefetchCount: 1, global: false);
@@ -43,7 +43,7 @@ public sealed class SubscriberRabbitMq : SubscriberBase
             await receiveCallback(this, messageReceivedEventArgs);
         };
 
-        _ = channel!.BasicConsume(queueName, autoAck: false, consumer);
+        channel!.BasicConsume(queueName, autoAck: false, consumer);
 
         return Task.CompletedTask;
     }

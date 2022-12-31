@@ -128,12 +128,12 @@ public class RouteHandlerTests
 
         if (expectedHttpStatusCode != httpResponseMessage.StatusCode)
         {
-            _ = errorMessages.AppendLine($"The Expected HTTP Status Code is: {expectedHttpStatusCode}, but the Actual HTTP Status Code was: {httpResponseMessage.StatusCode}");
+            errorMessages.AppendLine($"The Expected HTTP Status Code is: {expectedHttpStatusCode}, but the Actual HTTP Status Code was: {httpResponseMessage.StatusCode}");
         }
 
         if (expectedReasonPhrase != httpResponseMessage.ReasonPhrase)
         {
-            _ = errorMessages.AppendLine($"The Expected Reason Phrase is: {expectedReasonPhrase}, but the Actual Reason Phrase was: {httpResponseMessage.ReasonPhrase}");
+            errorMessages.AppendLine($"The Expected Reason Phrase is: {expectedReasonPhrase}, but the Actual Reason Phrase was: {httpResponseMessage.ReasonPhrase}");
         }
 
         if (httpResponseMessage.Headers.TryGetValues("Exception-Type", out var values))
@@ -142,12 +142,12 @@ public class RouteHandlerTests
 
             if (expectedExceptionType.Name != actualExceptionTypeHeaderValue)
             {
-                _ = errorMessages.AppendLine($"The Expected value of the HTTP Header: `Exception-Type` is: {expectedExceptionType.Name}, but the Actual value : {actualExceptionTypeHeaderValue}");
+                errorMessages.AppendLine($"The Expected value of the HTTP Header: `Exception-Type` is: {expectedExceptionType.Name}, but the Actual value : {actualExceptionTypeHeaderValue}");
             }
         }
         else
         {
-            _ = errorMessages.AppendLine($"Expected to find an HTTP Header: `Exception-Type` with a value of `{expectedExceptionType.Name}`, but no such header was found");
+            errorMessages.AppendLine($"Expected to find an HTTP Header: `Exception-Type` with a value of `{expectedExceptionType.Name}`, but no such header was found");
         }
 
         if (errorMessages.Length is not 0)

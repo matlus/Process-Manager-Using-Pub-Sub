@@ -24,8 +24,4 @@
     <ProjectReference Include="..\PostBindOrchectrator.Api\PostBindOrchestrator.Api.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="RouteHandlersForTest\" />
-  </ItemGroup>
-
 </Project>

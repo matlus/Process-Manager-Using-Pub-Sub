@@ -27,8 +27,8 @@ internal sealed class LoggerProvider : IDisposable
         loggerFactory = new LoggerFactory();
         loggerFactory = LoggerFactory.Create(builder =>
         {
-            _ = builder.Services.Configure<TelemetryConfiguration>(config => config.TelemetryChannel = telemetryChannel);
-            _ = builder
+            builder.Services.Configure<TelemetryConfiguration>(config => config.TelemetryChannel = telemetryChannel);
+            builder
             .ClearProviders()
 
             .AddConfiguration(loggingConfigurationDelegate())
@@ -43,7 +43,7 @@ internal sealed class LoggerProvider : IDisposable
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
             {
-                _ = builder.AddEventLog(new EventLogSettings { LogName = eventLogName, SourceName = eventLogName });
+                builder.AddEventLog(new EventLogSettings { LogName = eventLogName, SourceName = eventLogName });
             }
         });
     }

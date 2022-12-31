@@ -49,6 +49,7 @@ public sealed class DomainFacade : IDisposable
     {
         if (disposing && !disposed)
         {
+            serviceLocator.Dispose();
             postBindOrchestrationManager?.Dispose();
             disposed = true;
         }

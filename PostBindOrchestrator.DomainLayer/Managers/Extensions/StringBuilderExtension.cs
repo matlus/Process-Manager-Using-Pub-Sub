@@ -8,7 +8,7 @@ internal static class StringBuilderExtension
     {
         if (value is not null)
         {
-            _ = stringBuilder.AppendLine(value);
+            stringBuilder.AppendLine(value);
         }
     }
 }

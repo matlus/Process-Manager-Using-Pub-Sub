@@ -49,7 +49,7 @@ public sealed partial class ApplicationLogger
 
         public IEnumerator<KeyValuePair<string, object>> GetEnumerator()
         {
-            for (int i = 0; i < Count; i++)
+            for (var i = 0; i < Count; i++)
             {
                 yield return this[i];
             }
@@ -61,7 +61,7 @@ public sealed partial class ApplicationLogger
         {
             var errorLogString = new StringBuilder();
 
-            _ = errorLogString.AppendLine($"Error Log from Method: `{MethodName}`, CorrelationId: `{OrchestrationMessageReply.CorrelationId}`," +
+            errorLogString.AppendLine($"Error Log from Method: `{MethodName}`, CorrelationId: `{OrchestrationMessageReply.CorrelationId}`," +
                 $"Policy Number: `{OrchestrationMessageReply.PolicyNumber}`, Orchestration Task: `{OrchestrationMessageReply.OrchestrationTask}`, " +
                 $"Create On: `{OrchestrationMessageReply.TaskStage}`");
 

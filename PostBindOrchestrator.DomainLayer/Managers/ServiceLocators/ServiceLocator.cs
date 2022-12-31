@@ -6,6 +6,7 @@ namespace PostBindOrchestrator.DomainLayer;
 
 public sealed class ServiceLocator : ServiceLocatorBase
 {
+    private bool disposed;
     private ConfigurationProvider? configurationProvider;
     private LoggerProvider? loggerProvider;
 
@@ -45,5 +46,14 @@ public sealed class ServiceLocator : ServiceLocatorBase
     protected override ILogger CreateLoggerCore()
     {
         return LoggerProvider.CreateLogger();
+    }
+
+    protected override void Dispose(bool disposing)
+    {
+        if (disposing && !disposed)
+        {
+            loggerProvider?.Dispose();
+            disposed = true;
+        }
     }
 }

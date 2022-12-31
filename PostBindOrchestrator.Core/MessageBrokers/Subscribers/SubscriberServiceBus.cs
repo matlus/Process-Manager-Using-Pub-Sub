@@ -62,7 +62,7 @@ public sealed class SubscriberServiceBus : SubscriberBase
 
         if (!subscriptionExists)
         {
-            _ = await serviceBusAdministrationClient.CreateSubscriptionAsync(TopicName, QueueName);
+            await serviceBusAdministrationClient.CreateSubscriptionAsync(TopicName, QueueName);
         }
     }
 

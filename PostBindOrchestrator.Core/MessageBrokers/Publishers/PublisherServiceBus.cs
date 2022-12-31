@@ -26,7 +26,7 @@ public sealed class PublisherServiceBus : PublisherBase
 
     protected override async Task PublishCore<T>(T message, string messageId, string correlationId)
     {
-        byte[] messageBody = SerializeMessage(message);
+        var messageBody = SerializeMessage(message);
         var serviceBusMessage = InitializeMessageProperties(messageBody, messageId, correlationId, typeof(T));
 
         await serviceBusSender!.SendMessageAsync(serviceBusMessage);

@@ -2,9 +2,9 @@
 
 namespace PostBindOrchestrator.DomainLayer;
 
-internal sealed class NextOrchestrationTaskEnumProvider
+internal static class NextOrchestrationTaskEnumProvider
 {
-    public static string[] orchestrationTasks = Enum.GetValues<OrchestrationTask>().Select(ot => ot.ToString()).ToArray();
+    public static readonly string[] orchestrationTasks = Enum.GetValues<OrchestrationTask>().Select(ot => ot.ToString()).ToArray();
 
     public static OrchestrationTask GetNext(OrchestrationTask orchestrationTask)
     {

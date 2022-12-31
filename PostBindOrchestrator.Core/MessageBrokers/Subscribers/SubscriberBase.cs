@@ -19,7 +19,7 @@ public abstract class SubscriberBase : IDisposable
 
     public void Dispose()
     {
-        _ = Dispose(true);
+        Dispose(true);
         GC.SuppressFinalize(this);
     }
 
