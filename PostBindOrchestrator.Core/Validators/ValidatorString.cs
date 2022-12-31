@@ -1,6 +1,6 @@
-﻿namespace PostBindOrchestrator.DomainLayer;
+﻿namespace PostBindOrchestrator.Core;
 
-internal enum StringState
+public enum StringState
 {
     Null,
     Empty,
@@ -8,7 +8,7 @@ internal enum StringState
     Valid
 }
 
-internal static class ValidatorString
+public static class ValidatorString
 {
     public static string? Validate(string propertyName, string? propertyValue)
     {
@@ -18,6 +18,15 @@ internal static class ValidatorString
             StringState.Empty => $"The property: \"{propertyName}\" must be a valid {propertyName} and can not be Empty",
             StringState.WhiteSpaces => $"The property: \"{propertyName}\" must be a valid {propertyName} and can not be Whitespaces",
             _ => null,
+        };
+    }
+
+    public static string? GetValueOrNull(string? value)
+    {
+        return DetermineNullEmptyOrWhiteSpaces(value) switch
+        {
+            StringState.Null or StringState.Empty or StringState.WhiteSpaces => null,
+            _ => value,
         };
     }
 

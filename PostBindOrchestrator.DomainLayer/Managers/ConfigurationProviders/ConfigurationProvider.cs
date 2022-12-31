@@ -32,16 +32,12 @@ public class ConfigurationProvider
 
     public MessageBrokerSettings GetMessageBrokerSettings()
     {
-        var messageBrokerSettingsConfig = GetMessageBrokerSettingsPreValidated();
-        ValidatorMessageBrokerSettingsConfig.Validate(messageBrokerSettingsConfig);
-        return MapperMessageBrokerSettingsConfig.MapToMessageBrokerSettings(messageBrokerSettingsConfig);
+        return MessageBrokerSettingsProvider.GetMessageBrokerSettings(configurationRoot);
     }
 
     public ApplicationInsightsSettings GetApplicationInsightsSettings()
     {
-        var applicationInsightsSettingsConfig = GetApplicationInsightsSettingsPreValidated();
-        ValidatorApplicationInsightsSettingsConfig.Validate(applicationInsightsSettingsConfig);
-        return MapperApplicationInsightsSettingsConfig.MapToApplicationInsightsSettings(applicationInsightsSettingsConfig);
+        return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettings(configurationRoot);
     }
 
     public IConfiguration GetLoggingConfiguration()
@@ -56,48 +52,17 @@ public class ConfigurationProvider
 
     protected MessageBrokerSettingsConfig GetMessageBrokerSettingsPreValidated()
     {
-        const string messageBrokerSettingsKey = "MessageBroker";
-        var messageBrokerSettingsConfig = configurationRoot.GetSection(messageBrokerSettingsKey).Get<MessageBrokerSettingsConfig>();
-
-        if (messageBrokerSettingsConfig is not null)
-        {
-            messageBrokerSettingsConfig.MessageBrokerType = GetMessageBrokerType();
-        }
-        else
-        {
-            messageBrokerSettingsConfig = new MessageBrokerSettingsConfig();
-        }
-
-        return messageBrokerSettingsConfig;
+        return MessageBrokerSettingsProvider.GetMessageBrokerSettingsPreValidated(configurationRoot);
     }
 
     protected ApplicationInsightsSettingsConfig GetApplicationInsightsSettingsPreValidated()
     {
-        const string applicationInsightsSettingsKey = "AppInsightsConnectionString";
-        var applicationInsightsSettingsString = configurationRoot.GetSection(applicationInsightsSettingsKey).Get<string>();
-
-        var applicationInsightsSettingsConfig = new ApplicationInsightsSettingsConfig
-        {
-            ConnectionString = applicationInsightsSettingsString
-        };
-
-        return applicationInsightsSettingsConfig;
-    }
-
-    private MessageBrokerType GetMessageBrokerType()
-    {
-        var messageBrokerTypeString = RetrieveConfigurationSettingValueOrNull($"MessageBroker:MessageBrokerType") ?? "ServiceBus";
-        var messageBrokerType = (MessageBrokerType)Enum.Parse(typeof(MessageBrokerType), messageBrokerTypeString);
-        return messageBrokerType;
+        return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettingsPreValidated(configurationRoot);
     }
 
     private string? RetrieveConfigurationSettingValueOrNull(string key)
     {
         var value = RetrieveConfigurationSettingValue(key);
-        return ValidatorString.DetermineNullEmptyOrWhiteSpaces(value) switch
-        {
-            StringState.Null or StringState.Empty or StringState.WhiteSpaces => null,
-            _ => value,
-        };
+        return ValidatorString.GetValueOrNull(value);
     }
 }

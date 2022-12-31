@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace PostBindOrchestrator.DomainLayer;
+namespace PostBindOrchestrator.Core;
 
 internal static class StringBuilderExtension
 {
