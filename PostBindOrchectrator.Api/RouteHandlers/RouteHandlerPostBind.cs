@@ -1,4 +1,5 @@
-﻿using PostBindOrchestrator.DomainLayer;
+﻿using System.Diagnostics.CodeAnalysis;
+using PostBindOrchestrator.DomainLayer;
 
 namespace PostBindOrchestrator.Api;
 
@@ -18,6 +19,7 @@ internal class RouteHandlerPostBind : RouteHandlerBase
         await ProcessPostBindCore(correlationIdProvider.CorrelationId, policyNumber, interviewData);
     }
 
+    [ExcludeFromCodeCoverage]
     protected virtual Task ProcessPostBindCore(string correlationId, string policyNumber, InterviewData interviewData)
     {
         return domainFacade.ProcessPostBind(correlationId, policyNumber, interviewData);

@@ -70,7 +70,7 @@ public sealed partial class ApplicationLogger
 
         public static string Format(OrchestrationMessageReplyLogState orchestrationMessageReplyLogState, Exception? exception)
         {
-            return (exception != null)
+            return (exception is not null)
                 ? orchestrationMessageReplyLogState.ToString() + $" Original Exception Type: {exception.GetType().Name}, with message: {exception.Message}"
                 : orchestrationMessageReplyLogState.ToString();
         }

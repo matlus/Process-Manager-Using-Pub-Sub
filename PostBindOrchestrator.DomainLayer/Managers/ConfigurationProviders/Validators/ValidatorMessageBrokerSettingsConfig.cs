@@ -10,7 +10,7 @@ internal static class ValidatorMessageBrokerSettingsConfig
 
         ValidateMessageBrokerSettingsConfig(errorMessages, messageBrokerSettingsConfig);
 
-        if (errorMessages.Length != 0)
+        if (errorMessages.Length is not 0)
         {
             throw new ConfigurationSettingMissingException(errorMessages.ToString());
         }

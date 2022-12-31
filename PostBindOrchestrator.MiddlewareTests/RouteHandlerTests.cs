@@ -23,7 +23,7 @@ public class RouteHandlerTests
     {
         var httpClient = webApplicationFactory.CreateClient();
 
-        if (correlationId != null)
+        if (correlationId is not null)
         {
             httpClient.DefaultRequestHeaders.Add("X-Correlation-Id", correlationId);
         }
@@ -74,6 +74,52 @@ public class RouteHandlerTests
 
         // Assert
         AssertHttpResponseHasAllRequisitesForNon200Response(httpResponseMessage, HttpStatusCode.BadRequest, new CorrelationIdNotProvidedException().Reason, typeof(CorrelationIdNotProvidedException));
+        await AssertHttpResponseContentContains(httpResponseMessage.Content, "Correlation Id was Not Provided in the HTTP Header");
+    }
+
+    [Fact]
+    public async Task ProcessRevertToQuote_WhenValidRequestIsMade_ReturnsOKAndValidValuesAreReceived()
+    {
+        // Arrange
+        var expectedPolicyNumber = "Pol-24680";
+        var expectedCorrelationId = "Corr-2z4y6x8w0v";
+        var testMediator = GetAssociatedTestMediator<RouteHandlerRevertToQuote>();
+
+        using var httpClient = CreateHttpClient(expectedCorrelationId);
+
+        // Act
+        var httpResponseMessage = await httpClient.PostAsync($"/processreverttoquote/{expectedPolicyNumber}", null);
+
+        // Assert
+        await AssertHttpResponseIsSuccess(httpResponseMessage);
+        Assert.Equal(expectedCorrelationId, testMediator.CorrelationId);
+        Assert.Equal(expectedPolicyNumber, testMediator.PolicyNumber);
+    }
+
+    [Fact]
+    public async Task ProcessRevertToQuote_WhenNoCorrelationIdInHttpHeader_ReturnsBadRequestWithDetailedExceptionInformation()
+    {
+        // Arrange
+        var expectedPolicyNumber = "Pol-24680";
+
+        using var httpClient = CreateHttpClient(null);
+
+        // Act
+        var httpResponseMessage = await httpClient.PostAsync($"/processreverttoquote/{expectedPolicyNumber}", null);
+
+        // Assert
+        AssertHttpResponseHasAllRequisitesForNon200Response(httpResponseMessage, HttpStatusCode.BadRequest, new CorrelationIdNotProvidedException().Reason, typeof(CorrelationIdNotProvidedException));
+        await AssertHttpResponseContentContains(httpResponseMessage.Content, "Correlation Id was Not Provided in the HTTP Header");
+    }
+
+    private static async Task AssertHttpResponseContentContains(HttpContent content, string expectedContent)
+    {
+        var actualContent = await content.ReadAsStringAsync();
+
+        if (!actualContent.Contains(expectedContent))
+        {
+            throw new XunitException($"The HTTP Content was Expected to contain: `{expectedContent}`, but the Actual Content was `{actualContent}`");
+        }
     }
 
     private static void AssertHttpResponseHasAllRequisitesForNon200Response(HttpResponseMessage httpResponseMessage, HttpStatusCode expectedHttpStatusCode, string expectedReasonPhrase, Type expectedExceptionType)
@@ -104,7 +150,7 @@ public class RouteHandlerTests
             errorMessages.AppendLine($"Expected to find an HTTP Header: `Exception-Type` with a value of `{expectedExceptionType.Name}`, but no such header was found");
         }
 
-        if (errorMessages.Length > 0)
+        if (errorMessages.Length is not 0)
         {
             throw new XunitException(errorMessages.ToString());
         }

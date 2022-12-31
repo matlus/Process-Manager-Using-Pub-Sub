@@ -1,4 +1,5 @@
-﻿using PostBindOrchestrator.DomainLayer;
+﻿using System.Diagnostics.CodeAnalysis;
+using PostBindOrchestrator.DomainLayer;
 
 namespace PostBindOrchestrator.Api;
 
@@ -18,6 +19,7 @@ internal class RouteHandlerRevertToQuote : RouteHandlerBase
         await ProcessRevertToQuoteCore(correlationIdProvider.CorrelationId, policyNumber);
     }
 
+    [ExcludeFromCodeCoverage]
     protected virtual Task ProcessRevertToQuoteCore(string correlationId, string policyNumber)
     {
         return domainFacade.ProcessRevertToQuote(correlationId, policyNumber);

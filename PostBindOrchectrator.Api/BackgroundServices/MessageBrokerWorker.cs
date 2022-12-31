@@ -1,4 +1,5 @@
-﻿using PostBindOrchestrator.DomainLayer;
+﻿using System.Diagnostics.CodeAnalysis;
+using PostBindOrchestrator.DomainLayer;
 
 namespace PostBindOrchestrator.Api;
 
@@ -34,6 +35,7 @@ public sealed class MessageBrokerWorker : BackgroundService
         }
     }
 
+    [ExcludeFromCodeCoverage]
     public override async Task StopAsync(CancellationToken cancellationToken)
     {
         await base.StopAsync(cancellationToken);

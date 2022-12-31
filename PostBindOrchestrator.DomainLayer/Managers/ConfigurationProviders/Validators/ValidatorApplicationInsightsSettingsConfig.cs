@@ -6,7 +6,7 @@ internal static class ValidatorApplicationInsightsSettingsConfig
     {
         var errorMessage = ValidateApplicationInsightsSettingsConfig(applicationInsightsSettingsConfig);
 
-        if (errorMessage != null)
+        if (errorMessage is not null)
         {
             throw new ConfigurationSettingMissingException(errorMessage);
         }

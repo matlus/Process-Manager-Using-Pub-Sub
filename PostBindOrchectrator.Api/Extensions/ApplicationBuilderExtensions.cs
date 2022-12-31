@@ -1,4 +1,4 @@
-﻿namespace PostBindOrchestrator.Api.ApplicationBuilderExtensions;
+﻿namespace PostBindOrchestrator.Api;
 
 public static class ApplicationBuilderExtensions
 {

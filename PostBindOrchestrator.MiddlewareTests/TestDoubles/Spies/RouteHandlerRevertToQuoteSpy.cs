@@ -3,19 +3,17 @@ using PostBindOrchestrator.Api;
 using PostBindOrchestrator.DomainLayer;
 
 namespace PostBindOrchestrator.MiddlewareTests;
-
-internal sealed class PostBindRouteHandlerSpy : RouteHandlerPostBind, ITestMediatorCompositor
+internal sealed class RouteHandlerRevertToQuoteSpy : RouteHandlerRevertToQuote, ITestMediatorCompositor
 {
     private readonly TestMediator testMediator;
     public TestMediator TestMediator => testMediator;
 
-    public PostBindRouteHandlerSpy(DomainFacade domainFacade) : base(domainFacade) => testMediator = new TestMediator();
+    public RouteHandlerRevertToQuoteSpy(DomainFacade domainFacade) : base(domainFacade) => testMediator = new TestMediator();
 
-    protected override Task ProcessPostBindCore(string correlationId, string policyNumber, InterviewData interviewData)
+    protected override Task ProcessRevertToQuoteCore(string correlationId, string policyNumber)
     {
         testMediator.CorrelationId = correlationId;
         testMediator.PolicyNumber = policyNumber;
-        testMediator.InterviewData = interviewData;
         return Task.CompletedTask;
     }
 }

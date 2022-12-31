@@ -69,7 +69,7 @@ public sealed partial class ApplicationLogger
 
         public static string Format(BrokerMessageLogState brokerMessageLogState, Exception? exception)
         {
-            return (exception != null)
+            return (exception is not null)
                 ? brokerMessageLogState.ToString() + $" Original Exception Type: {exception.GetType().Name}, with message: {exception.Message}"
                 : brokerMessageLogState.ToString();
         }

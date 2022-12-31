@@ -24,7 +24,7 @@ public class ConfigurationProvider
     private static void LoadEnvironmentSpecificAppSettings(ConfigurationBuilder configurationBuilder)
     {
         var aspNetCoreEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
-        if (aspNetCoreEnvironment != null)
+        if (aspNetCoreEnvironment is not null)
         {
             configurationBuilder.AddJsonFile($"appsettings.{aspNetCoreEnvironment}.json");
         }
@@ -59,7 +59,7 @@ public class ConfigurationProvider
         const string messageBrokerSettingsKey = "MessageBroker";
         var messageBrokerSettingsConfig = configurationRoot.GetSection(messageBrokerSettingsKey).Get<MessageBrokerSettingsConfig>();
 
-        if (messageBrokerSettingsConfig != null)
+        if (messageBrokerSettingsConfig is not null)
         {
             messageBrokerSettingsConfig.MessageBrokerType = GetMessageBrokerType();
         }

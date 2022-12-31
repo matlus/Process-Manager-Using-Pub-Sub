@@ -10,7 +10,8 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
-        builder.ConfigureServices(services => ReplaceService<RouteHandlerPostBind, PostBindRouteHandlerSpy>(services));
+        builder.ConfigureServices(services => ReplaceService<RouteHandlerPostBind, RouteHandlerPostBindSpy>(services));
+        builder.ConfigureServices(services => ReplaceService<RouteHandlerRevertToQuote, RouteHandlerRevertToQuoteSpy>(services));
     }
 
     private static void ReplaceService<TBase, TImplementation>(IServiceCollection serviceCollection) where TBase : class

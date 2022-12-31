@@ -1,5 +1,4 @@
 using PostBindOrchestrator.Api;
-using PostBindOrchestrator.Api.ApplicationBuilderExtensions;
 using PostBindOrchestrator.DomainLayer;
 
 var builder = WebApplication.CreateBuilder(args);
