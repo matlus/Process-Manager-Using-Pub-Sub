@@ -2,8 +2,8 @@
 
 public abstract class PublisherBase : IDisposable
 {
-    protected string? ConnectionString;
-    protected string? TopicName;
+    protected string? ConnectionString { get; set; }
+    protected string? TopicName { get; set; }
 
     public async Task Initialize(string connectionString, string topicName, string queueName) => await InitializeCore(connectionString, topicName, queueName);
 

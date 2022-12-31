@@ -16,13 +16,13 @@ public abstract class PostBindOrchestratorBaseException : Exception
     {
     }
 
-    protected PostBindOrchestratorBaseException(SerializationInfo info, StreamingContext context)
-        : base(info, context)
+    protected PostBindOrchestratorBaseException(string message, Exception innerException)
+        : base(message, innerException)
     {
     }
 
-    protected PostBindOrchestratorBaseException(string message, Exception innerException)
-        : base(message, innerException)
+    protected PostBindOrchestratorBaseException(SerializationInfo info, StreamingContext context)
+    : base(info, context)
     {
     }
 

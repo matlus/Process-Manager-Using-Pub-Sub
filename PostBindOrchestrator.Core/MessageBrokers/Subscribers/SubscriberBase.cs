@@ -2,8 +2,8 @@
 
 public abstract class SubscriberBase : IDisposable
 {
-    protected string? TopicName;
-    protected string? QueueName;
+    protected string? TopicName { get; set; }
+    protected string? QueueName { get; set; }
 
     public Task Initialize(string connectionString, string topicName, string queueName) => InitializeCore(connectionString, topicName, queueName);
 

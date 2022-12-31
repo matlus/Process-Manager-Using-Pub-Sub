@@ -6,7 +6,7 @@ namespace PostBindOrchestrator.DomainLayer;
 
 public sealed partial class ApplicationLogger
 {
-    public readonly record struct OrchestrationMessageReplyLogState : IReadOnlyList<KeyValuePair<string, object>>
+    private readonly record struct OrchestrationMessageReplyLogState : IReadOnlyList<KeyValuePair<string, object>>
     {
         private readonly List<KeyValuePair<string, object>> keyValuePairs;
 

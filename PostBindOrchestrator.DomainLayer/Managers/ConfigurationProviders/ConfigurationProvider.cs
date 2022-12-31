@@ -60,9 +60,9 @@ public class ConfigurationProvider
         return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettingsPreValidated(configurationRoot);
     }
 
-    private string? RetrieveConfigurationSettingValueOrNull(string key)
-    {
-        var value = RetrieveConfigurationSettingValue(key);
-        return ValidatorString.GetValueOrNull(value);
-    }
+    ////private string? RetrieveConfigurationSettingValueOrNull(string key)
+    ////{
+    ////    var value = RetrieveConfigurationSettingValue(key);
+    ////    return ValidatorString.GetValueOrNull(value);
+    ////}
 }

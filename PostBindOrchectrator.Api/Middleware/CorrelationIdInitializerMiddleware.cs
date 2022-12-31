@@ -2,7 +2,7 @@
 
 namespace PostBindOrchestrator.Api;
 
-public sealed class CorrelationIdInitializerMiddleware
+public class CorrelationIdInitializerMiddleware
 {
     private readonly RequestDelegate next;
 
