@@ -4,7 +4,7 @@ namespace PostBindOrchestrator.Core;
 
 public static class ApplicationInsightsSettingsProvider
 {
-    private const string applicationInsightsSettingsKey = "AppInsightsConnectionString";
+    private const string applicationInsightsSettingsKey = "ApplicationInsights";
 
     /// <summary> 
     ///  
@@ -28,14 +28,8 @@ public static class ApplicationInsightsSettingsProvider
 
     public static ApplicationInsightsSettingsConfig GetApplicationInsightsSettingsPreValidated(IConfigurationRoot configurationRoot)
     {
-        var applicationInsightsSettingsString = configurationRoot.GetSection(applicationInsightsSettingsKey).Get<string>();
-
-        var applicationInsightsSettingsConfig = new ApplicationInsightsSettingsConfig
-        {
-            ConnectionString = applicationInsightsSettingsString
-        };
-
-        return applicationInsightsSettingsConfig;
+        var applicationInsightsSettingsConfig = configurationRoot.GetSection(applicationInsightsSettingsKey).Get<ApplicationInsightsSettingsConfig>();
+        return applicationInsightsSettingsConfig ?? new ApplicationInsightsSettingsConfig();
     }
 
     private static void Validate(ApplicationInsightsSettingsConfig applicationInsightsSettingsConfig)
@@ -50,6 +44,6 @@ public static class ApplicationInsightsSettingsProvider
 
     private static string? ValidateApplicationInsightsSettingsConfig(ApplicationInsightsSettingsConfig applicationInsightsSettingsConfig)
     {
-        return ValidatorString.Validate("AppInsightsConnectionString", applicationInsightsSettingsConfig.ConnectionString);
+        return ValidatorString.Validate("ApplicationInsights.ConnectionString", applicationInsightsSettingsConfig.ConnectionString);
     }
 }

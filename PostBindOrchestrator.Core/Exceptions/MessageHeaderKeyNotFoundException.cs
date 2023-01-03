@@ -10,7 +10,7 @@ public sealed class MessageHeaderKeyNotFoundException : PostBindOrchestratorTech
     public MessageHeaderKeyNotFoundException()
     {
     }
-    
+
     public MessageHeaderKeyNotFoundException(string message)
         : base(message)
     {

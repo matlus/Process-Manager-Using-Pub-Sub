@@ -3,7 +3,7 @@ using PostBindOrchestrator.Core;
 
 namespace PostBindOrchestrator.DomainLayer;
 
-public abstract class ServiceLocatorBase : IDisposable
+public abstract class ServiceLocatorBase
 {
     public ConfigurationProvider CreateConfigurationProvider()
     {
@@ -25,13 +25,6 @@ public abstract class ServiceLocatorBase : IDisposable
         return CreateLoggerCore();
     }
 
-    public void Dispose()
-    {
-        Dispose(true);
-        GC.SuppressFinalize(this);
-    }
-
-    protected abstract void Dispose(bool disposing);
     protected abstract ConfigurationProvider CreateConfigurationProviderCore();
     protected abstract SubscriberBase CreateMessageBrokerSubscriberCore();
     protected abstract PublisherBase CreateMessageBrokerPublisherCore();

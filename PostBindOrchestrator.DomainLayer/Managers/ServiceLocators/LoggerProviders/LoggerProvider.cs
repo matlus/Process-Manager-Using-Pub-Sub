@@ -1,9 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Runtime.InteropServices;
 using Microsoft.ApplicationInsights.Channel;
-using Microsoft.ApplicationInsights.Extensibility;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.EventLog;
 
@@ -21,24 +19,22 @@ internal sealed class LoggerProvider : IDisposable
     public LoggerProvider(string eventLogName, Func<IConfiguration> loggingConfigurationDelegate, string? appInsightsConnectionString = null)
     {
         this.eventLogName = eventLogName;
-
         telemetryChannel = new InMemoryChannel();
 
         loggerFactory = new LoggerFactory();
         loggerFactory = LoggerFactory.Create(builder =>
         {
-            builder.Services.Configure<TelemetryConfiguration>(config => config.TelemetryChannel = telemetryChannel);
             builder
             .ClearProviders()
-
             .AddConfiguration(loggingConfigurationDelegate())
-
             .AddConsole()
-
             .AddEventSourceLogger()
-
             .AddApplicationInsights(
-                configureTelemetryConfiguration: config => config.ConnectionString = appInsightsConnectionString,
+                configureTelemetryConfiguration: config =>
+                {
+                    config.ConnectionString = appInsightsConnectionString;
+                    config.TelemetryChannel = telemetryChannel;
+                },
                 configureApplicationInsightsLoggerOptions: options => { });
 
             if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
@@ -59,6 +55,7 @@ internal sealed class LoggerProvider : IDisposable
         {
             telemetryChannel.Flush();
             telemetryChannel.Dispose();
+            loggerFactory.Dispose();
             disposed = true;
         }
     }

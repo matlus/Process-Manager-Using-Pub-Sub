@@ -8,8 +8,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddApplicationInsightsTelemetryWorkerService();
 
-builder.Services.AddSingleton<ServiceLocatorBase, ServiceLocator>();
+builder.Services.AddSingleton<ServiceLocatorBase, ServiceLocator>(sp =>
+{
+    var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
+    return new ServiceLocator(loggerFactory);
+});
 
 builder.Services.AddSingleton(sp =>
 {
@@ -23,11 +28,11 @@ builder.Services.AddSingleton(sp =>
     return new DomainFacade(serviceLocator);
 });
 
-builder.Services.AddHostedService<MessageBrokerWorker>();
-
 builder.Services.AddScoped<CorrelationIdProvider>();
 builder.Services.AddSingleton<RouteHandlerPostBind>();
 builder.Services.AddSingleton<RouteHandlerRevertToQuote>();
+
+builder.Services.AddHostedService<MessageBrokerWorker>();
 
 var app = builder.Build();
 

@@ -14,7 +14,7 @@ public static class ApplicationSerializer
 
     public static byte[] Serialize<T>(T value)
     {
-        string jsonString = JsonSerializer.Serialize(value, jsonSerializerOptions);
+        var jsonString = JsonSerializer.Serialize(value, jsonSerializerOptions);
         return Encoding.UTF8.GetBytes(jsonString);
     }
 
@@ -34,6 +34,12 @@ public static class ApplicationSerializer
     {
         var bytesAsString = Encoding.UTF8.GetString(bytes);
 
+        if (bytesAsString is null)
+        {
+            var message = $"{nameof(Deserialize)}: Attempting to Deserialize the JSON string: {bytesAsString} to target of Type: {typeof(T).Name}, resulted in a null object.";
+            throw new MessageDeserializationFailedException(message);
+        }
+
         try
         {
             return JsonSerializer.Deserialize<T>(bytesAsString, jsonSerializerOptions)!;
@@ -41,8 +47,7 @@ public static class ApplicationSerializer
         catch (JsonException e)
         {
             var message = $"{nameof(Deserialize)}: Exception occurred while attempting to deserialize JSON string to target of Type: {typeof(T).Name}. " +
-                $"JSON received: {bytesAsString}. The Original Exception type is: {e.GetType().Name}. Original Exception message: {e.Message}";
-
+                    $"JSON received: {bytesAsString}. The Original Exception type is: {e.GetType().Name}. Original Exception message: {e.Message}";
             throw new MessageDeserializationFailedException(message, e);
         }
     }

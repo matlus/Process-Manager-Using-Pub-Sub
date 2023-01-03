@@ -14,14 +14,13 @@ public class ConfigurationProvider
         configurationBuilder.AddJsonFile("appsettings.json");
         LoadEnvironmentSpecificAppSettings(configurationBuilder);
         configurationBuilder.AddEnvironmentVariables("PostBindOrc_");
-
         configurationRoot = configurationBuilder.Build();
     }
 
     [ExcludeFromCodeCoverage]
     internal ConfigurationProvider(IConfigurationRoot configurationRoot) => this.configurationRoot = configurationRoot;
 
-    private static void LoadEnvironmentSpecificAppSettings(ConfigurationBuilder configurationBuilder)
+    private static void LoadEnvironmentSpecificAppSettings(IConfigurationBuilder configurationBuilder)
     {
         var aspNetCoreEnvironment = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT");
         if (aspNetCoreEnvironment is not null)

@@ -1,29 +1,18 @@
-﻿
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using PostBindOrchestrator.Core;
 
 namespace PostBindOrchestrator.DomainLayer;
 
 public sealed class ServiceLocator : ServiceLocatorBase
 {
-    private bool disposed;
+    private readonly ILoggerFactory loggerFactory;
     private ConfigurationProvider? configurationProvider;
-    private LoggerProvider? loggerProvider;
 
-    private ConfigurationProvider ConfigurationProvider
-    {
-        get
-        {
-            return configurationProvider ??= CreateConfigurationProvider();
-        }
-    }
+    private ConfigurationProvider ConfigurationProvider => configurationProvider ??= CreateConfigurationProvider();
 
-    private LoggerProvider LoggerProvider
+    public ServiceLocator(ILoggerFactory loggerFactory)
     {
-        get
-        {
-            return loggerProvider ??= new LoggerProvider("PostBindOrchestrator.DomainLayer", ConfigurationProvider.GetLoggingConfiguration, ConfigurationProvider.GetApplicationInsightsSettings().ConnectionString);
-        }
+        this.loggerFactory = loggerFactory;
     }
 
     protected override ConfigurationProvider CreateConfigurationProviderCore()
@@ -45,15 +34,6 @@ public sealed class ServiceLocator : ServiceLocatorBase
 
     protected override ILogger CreateLoggerCore()
     {
-        return LoggerProvider.CreateLogger();
-    }
-
-    protected override void Dispose(bool disposing)
-    {
-        if (disposing && !disposed)
-        {
-            loggerProvider?.Dispose();
-            disposed = true;
-        }
+        return loggerFactory.CreateLogger("PostBindOrchestrator.DomainLayer");
     }
 }

@@ -8,11 +8,6 @@ public sealed class DomainFacade : IDisposable
     private readonly ServiceLocatorBase serviceLocator;
     private PostBindOrchestrationManager? postBindOrchestrationManager;
 
-    public DomainFacade()
-          : this(new ServiceLocator())
-    {
-    }
-
     public DomainFacade(ServiceLocatorBase serviceLocator) => this.serviceLocator = serviceLocator;
 
     private PostBindOrchestrationManager PostBindOrchestrationManager
@@ -49,7 +44,6 @@ public sealed class DomainFacade : IDisposable
     {
         if (disposing && !disposed)
         {
-            serviceLocator.Dispose();
             postBindOrchestrationManager?.Dispose();
             disposed = true;
         }

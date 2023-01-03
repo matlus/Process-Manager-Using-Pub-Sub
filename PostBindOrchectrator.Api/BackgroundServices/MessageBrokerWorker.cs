@@ -21,6 +21,10 @@ public sealed class MessageBrokerWorker : BackgroundService
         {
             await domainFacade.StartListening(stoppingToken);
         }
+        catch (TaskCanceledException)
+        {
+            //// Intentionally swallowing this type of exception
+        }
         catch (Exception e)
         {
             applicationLogger.LogError(
