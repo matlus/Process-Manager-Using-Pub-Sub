@@ -15,7 +15,7 @@ public abstract class PublisherBase : IDisposable
         }
         catch (Exception ex)
         {
-            throw new MessageBrokerPublishException($"Failed to publish a message to the {TopicName} topic, with connection string {ConnectionString}", ex);
+            throw new MessageBrokerPublishException($"Failed to publish a message to the {TopicName} topic, with connection string {ConnectionString}. The Original Exception Type is: {ex.GetType().Name} and the Original Exception Message is: {ex.Message}", ex);
         }
     }
 

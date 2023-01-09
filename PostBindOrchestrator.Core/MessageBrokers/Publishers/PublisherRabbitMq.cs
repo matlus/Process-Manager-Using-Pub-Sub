@@ -30,7 +30,7 @@ public sealed class PublisherRabbitMq : PublisherBase
     {
         var basicProperties = InitializeBasicProperties(channel!.CreateBasicProperties(), messageId, correlationId, typeof(T));
 
-        byte[] messageBody = SerializeMessage(message);
+        var messageBody = SerializeMessage(message);
 
         channel.BasicPublish(topicName!, routingKey: string.Empty, basicProperties, messageBody);
 

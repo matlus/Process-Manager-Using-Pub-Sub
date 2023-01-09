@@ -1,5 +1,4 @@
 ﻿using Azure.Messaging.ServiceBus;
-using Microsoft.Azure.Amqp.Framing;
 using PostBindOrchestrator.Core;
 using PostBindOrchestrator.Core.Models.OrchestrationMessages;
 
@@ -7,7 +6,7 @@ namespace PostBindOrchestrationTask.DomainLayer;
 
 internal sealed class PostBindOrchestrationTaskManager : IDisposable
 {
-    private const string OrchestrationReplyTopicName = "pbo.orch.reply.topic";
+    private const string OrchestrationReplyTopicName = "pbo.orch.reply1.topic";
     private const string OrchestrationReplyQueueName = "pbo.orch.reply.que";
     private const string OrchestrationExceptionTopicName = "pbo.orch.exception.topic";
     private const string OrchestrationExceptionQueueName = "pbo.orch.exception.que";
@@ -67,8 +66,7 @@ internal sealed class PostBindOrchestrationTaskManager : IDisposable
                 DateTimeOffset.UtcNow,
                 OrchestrationTask.SendCoIDocument,
                 "Completed"), messageId, orchestrationTaskMessage.CorrelationId);
-            logEvent = LogEvent.OrchestrationTaskReplyPublished;
-            ////throw new MessageBrokerPublishException($"There was an exception Publising a message to the topic: {OrchestrationReplyTopicName}");
+            logEvent = LogEvent.OrchestrationTaskReplyPublished;            
         }
         catch (Exception e)        
         {

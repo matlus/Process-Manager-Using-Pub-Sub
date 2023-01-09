@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using PostBindOrchestrator.Api;
 
 namespace PostBindOrchestrator.MiddlewareTests;
@@ -12,6 +13,7 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services => ReplaceService<RouteHandlerPostBind, RouteHandlerPostBindSpy>(services));
         builder.ConfigureServices(services => ReplaceService<RouteHandlerRevertToQuote, RouteHandlerRevertToQuoteSpy>(services));
+        builder.ConfigureServices(services => ReplaceService<ILogger, LoggerSpy>(services));
     }
 
     private static void ReplaceService<TBase, TImplementation>(IServiceCollection serviceCollection) where TBase : class
