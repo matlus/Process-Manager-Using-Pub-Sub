@@ -7,7 +7,7 @@ namespace PostBindOrchestrationTask.DomainLayer;
 
 internal sealed class PostBindOrchestrationTaskManager : IDisposable
 {
-    private const string OrchestrationReplyTopicName = "pbo.orch.reply1.topic";
+    private const string OrchestrationReplyTopicName = "pbo.orch.reply.topic";
     private const string OrchestrationReplyQueueName = "pbo.orch.reply.que";
     private const string OrchestrationExceptionTopicName = "pbo.orch.exception.topic";
     private const string OrchestrationExceptionQueueName = "pbo.orch.exception.que";
