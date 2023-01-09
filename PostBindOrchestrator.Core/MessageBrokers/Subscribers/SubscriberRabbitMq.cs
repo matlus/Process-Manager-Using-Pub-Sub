@@ -10,7 +10,7 @@ public sealed class SubscriberRabbitMq : SubscriberBase
     private IModel? channel;
     private string? queueName;
 
-    protected override Task InitializeCore(string connectionString, string topicName, string queueName)
+    protected override Task InitializeCore(string connectionString, string topicName, string queueName, CancellationToken cancellationToken)
     {
         var connectionFactory = new ConnectionFactory()
         {

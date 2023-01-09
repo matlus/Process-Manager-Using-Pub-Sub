@@ -25,4 +25,6 @@ public abstract class PostBindOrchestratorBusinessBaseException : PostBindOrches
         : base(info, context)
     {
     }
+
+    public sealed override string Category => "Business";
 }

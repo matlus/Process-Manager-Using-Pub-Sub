@@ -1,9 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.Extensions.Logging;
-using PostBindOrchestrator.Core;
 
-namespace PostBindOrchestrator.DomainLayer;
+namespace PostBindOrchestrator.Core;
 
+#pragma warning disable CA2254
 [ExcludeFromCodeCoverage]
 public sealed partial class ApplicationLogger
 {
@@ -15,9 +15,7 @@ public sealed partial class ApplicationLogger
     {
         if (Logger.IsEnabled(LogLevel.Information))
         {
-#pragma warning disable CA2254 // Template should be a static expression
             Logger.LogInformation(eventId, message, args);
-#pragma warning restore CA2254 // Template should be a static expression
         }
     }
 
@@ -25,9 +23,7 @@ public sealed partial class ApplicationLogger
     {
         if (Logger.IsEnabled(LogLevel.Error))
         {
-#pragma warning disable CA2254 // Template should be a static expression
             Logger.LogError((int)logEvent, exception, message, param1, param2, param3);
-#pragma warning restore CA2254 // Template should be a static expression
         }
     }
 
@@ -35,9 +31,7 @@ public sealed partial class ApplicationLogger
     {
         if (Logger.IsEnabled(LogLevel.Error))
         {
-#pragma warning disable CA2254 // Template should be a static expression
             Logger.LogError((int)logEvent, exception, message, param1, param2, param3, param4, param5);
-#pragma warning restore CA2254 // Template should be a static expression
         }
     }
 
@@ -45,18 +39,7 @@ public sealed partial class ApplicationLogger
     {
         if (Logger.IsEnabled(LogLevel.Error))
         {
-#pragma warning disable CA2254 // Template should be a static expression
             Logger.LogError((int)logEvent, exception, message, param1, param2, param3, param4, param5, param6);
-#pragma warning restore CA2254 // Template should be a static expression
-        }
-    }
-
-    public void LogError(LogEvent logEvent, Exception exception, string methodName, OrchestrationMessageReply orchestrationMessageReply)
-    {
-        if (Logger.IsEnabled(LogLevel.Error))
-        {
-            var orchestrationMessageReplyLogState = new OrchestrationMessageReplyLogState(logEvent, methodName, orchestrationMessageReply);
-            Logger.Log(LogLevel.Error, new EventId((int)logEvent, logEvent.ToString()), orchestrationMessageReplyLogState, exception, OrchestrationMessageReplyLogState.Format);
         }
     }
 
@@ -64,8 +47,27 @@ public sealed partial class ApplicationLogger
     {
         if (Logger.IsEnabled(LogLevel.Error))
         {
-            var brokerMessageLogState = new BrokerMessageLogState(logEvent, methodName, brokerMessage);
-            Logger.Log(LogLevel.Error, new EventId((int)logEvent, logEvent.ToString()), brokerMessageLogState, exception, BrokerMessageLogState.Format);
+            var logStateBrokerMessage = new LogStateBrokerMessage(logEvent, methodName, brokerMessage, exception);
+            Logger.Log(LogLevel.Error, new EventId((int)logEvent, logEvent.ToString()), logStateBrokerMessage, exception, LogStateBrokerMessage.Format);
+        }
+    }
+
+    public void LogError(LogEvent logEvent, Exception exception, string methodName, OrchestrationTaskMessage orchestrationTaskMessage)
+    {
+        if (Logger.IsEnabled(LogLevel.Error))
+        {
+            var logStateOrchestrationTaskMessage = new LogStateOrchestrationTaskMessage(logEvent, methodName, orchestrationTaskMessage, exception);
+            Logger.Log(LogLevel.Error, new EventId((int)logEvent, logEvent.ToString()), logStateOrchestrationTaskMessage, exception, LogStateOrchestrationTaskMessage.Format);
+        }
+    }
+
+    public void LogError(LogEvent logEvent, Exception exception, string methodName, OrchestrationReplyMessage orchestrationReplyMessage)
+    {
+        if (Logger.IsEnabled(LogLevel.Error))
+        {
+            var logStateOrchestrationReplyMessage = new LogStateOrchestrationReplyMessage(logEvent, methodName, orchestrationReplyMessage, exception);
+            Logger.Log(LogLevel.Error, new EventId((int)logEvent, logEvent.ToString()), logStateOrchestrationReplyMessage, exception, LogStateOrchestrationReplyMessage.Format);
         }
     }
 }
+#pragma warning restore CA2254

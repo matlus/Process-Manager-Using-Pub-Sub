@@ -25,4 +25,6 @@ public abstract class PostBindOrchestratorTechnicalBaseException : PostBindOrche
         : base(info, context)
     {
     }
+
+    public sealed override string Category => "Technical";
 }

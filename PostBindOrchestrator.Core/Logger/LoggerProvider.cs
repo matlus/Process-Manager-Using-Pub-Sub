@@ -5,7 +5,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.EventLog;
 
-namespace PostBindOrchestrator.DomainLayer;
+namespace PostBindOrchestrator.Core;
 
 internal sealed class LoggerProvider : IDisposable
 {

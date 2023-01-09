@@ -27,4 +27,5 @@ public abstract class PostBindOrchestratorBaseException : Exception
     }
 
     public abstract string Reason { get; }
+    public abstract string Category { get; }
 }

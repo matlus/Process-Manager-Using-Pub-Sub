@@ -21,23 +21,23 @@ public static class MessageBrokerSettingsProvider
     ///   }
     /// </code>
     /// </example>
-    /// <param name="configurationRoot">The <see cref="IConfigurationRoot"/></param>
+    /// <param name="configurationRoot">The <see cref="IConfiguration"/></param>
     /// <param name="retrieveConfigurationSettingValueOrNull">A Func that returns the configuration setting value or null if the value is missing, empty or white spaces</param>
     /// <returns>A validated MessageBrokerSettings instance</returns>
-    public static MessageBrokerSettings GetMessageBrokerSettings(IConfigurationRoot configurationRoot)
+    public static MessageBrokerSettings GetMessageBrokerSettings(IConfiguration configuration)
     {
-        var messageBrokerSettingsConfig = GetMessageBrokerSettingsPreValidated(configurationRoot);
+        var messageBrokerSettingsConfig = GetMessageBrokerSettingsPreValidated(configuration);
         Validate(messageBrokerSettingsConfig);
         return messageBrokerSettingsConfig;
     }
 
-    public static MessageBrokerSettingsConfig GetMessageBrokerSettingsPreValidated(IConfigurationRoot configurationRoot)
+    public static MessageBrokerSettingsConfig GetMessageBrokerSettingsPreValidated(IConfiguration configuration)
     {
-        var messageBrokerSettingsConfig = configurationRoot.GetSection(messageBrokerSettingsKey).Get<MessageBrokerSettingsConfig>();
+        var messageBrokerSettingsConfig = configuration.GetSection(messageBrokerSettingsKey).Get<MessageBrokerSettingsConfig>();
 
         if (messageBrokerSettingsConfig is not null)
         {
-            messageBrokerSettingsConfig.MessageBrokerType = GetMessageBrokerType(configurationRoot);
+            messageBrokerSettingsConfig.MessageBrokerType = GetMessageBrokerType(configuration);
         }
         else
         {
@@ -47,9 +47,9 @@ public static class MessageBrokerSettingsProvider
         return messageBrokerSettingsConfig;
     }
 
-    private static MessageBrokerType GetMessageBrokerType(IConfigurationRoot configurationRoot)
+    private static MessageBrokerType GetMessageBrokerType(IConfiguration configuration)
     {
-        var value = configurationRoot[$"{messageBrokerSettingsKey}:{messageBrokerTypePropertyName}"];
+        var value = configuration[$"{messageBrokerSettingsKey}:{messageBrokerTypePropertyName}"];
         var messageBrokerTypeString = ValidatorString.GetValueOrNull(value) ?? MessageBrokerType.ServiceBus.ToString();
         return (MessageBrokerType)Enum.Parse(typeof(MessageBrokerType), messageBrokerTypeString);
     }

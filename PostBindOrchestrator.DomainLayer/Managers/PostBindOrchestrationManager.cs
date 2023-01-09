@@ -13,21 +13,9 @@ internal sealed class PostBindOrchestrationManager : IDisposable
     private ApplicationLogger? applicationLogger;
     private SubscriberBase? subscriberOrchestrationReply;
 
-    private ConfigurationProvider ConfigurationProvider
-    {
-        get
-        {
-            return configurationProvider ??= serviceLocator.CreateConfigurationProvider();
-        }
-    }
+    private ConfigurationProvider ConfigurationProvider => configurationProvider ??= serviceLocator.CreateConfigurationProvider();
 
-    private ApplicationLogger ApplicationLogger
-    {
-        get
-        {
-            return applicationLogger ??= new ApplicationLogger(serviceLocator.CreateLogger());
-        }
-    }
+    private ApplicationLogger ApplicationLogger => applicationLogger ??= new ApplicationLogger(serviceLocator.CreateLogger());
 
     public PostBindOrchestrationManager(ServiceLocatorBase serviceLocator) => this.serviceLocator = serviceLocator;
 
@@ -49,7 +37,7 @@ internal sealed class PostBindOrchestrationManager : IDisposable
         var messageBrokerSettings = ConfigurationProvider.GetMessageBrokerSettings();
 
         subscriberOrchestrationReply = serviceLocator.CreateMessageBrokerSubscriber();
-        await subscriberOrchestrationReply.Initialize(messageBrokerSettings.MessageBrokerConnectionString, OrchestrationReplyTopicName, OrchestrationReplyQueueName);
+        await subscriberOrchestrationReply.Initialize(messageBrokerSettings.MessageBrokerConnectionString, OrchestrationReplyTopicName, OrchestrationReplyQueueName, cancellationToken);
         await subscriberOrchestrationReply.Subscribe(OnOrchestrationReplyMessageReceived, cancellationToken);
 
         //// Start listening on the Exception Topic as well
@@ -58,17 +46,17 @@ internal sealed class PostBindOrchestrationManager : IDisposable
     private async Task OnOrchestrationReplyMessageReceived(SubscriberBase subscriber, MessageReceivedEventArgs messageReceivedEventArgs)
     {
         var brokerMessage = messageReceivedEventArgs.Message;
-        OrchestrationMessageReply? orchestrationMessageReply = null;
-        var logEvent = LogEvent.OnOrchestrationReplyMessageReceived;
+        OrchestrationReplyMessage? orchestrationReplyMessage = null;
+        var logEvent = LogEvent.OrchestrationReplyMessageReceived;
 
         try
         {
-            logEvent = LogEvent.DeSerializeReplyMessage;
-            orchestrationMessageReply = ApplicationSerializer.Deserialize<OrchestrationMessageReply>(brokerMessage.Body);
+            logEvent = LogEvent.DeSerializeMessage;
+            orchestrationReplyMessage = ApplicationSerializer.Deserialize<OrchestrationReplyMessage>(brokerMessage.Body);
 
-            var orchestrationTaskNext = GetNextOrchestrationTask(orchestrationMessageReply.PolicyNumber, orchestrationMessageReply.OrchestrationTask);
+            var orchestrationTaskNext = GetNextOrchestrationTask(orchestrationReplyMessage.PolicyNumber, orchestrationReplyMessage.OrchestrationTask);
 
-            logEvent = LogEvent.OnOrchestrationTaskStartPublish;
+            logEvent = LogEvent.OrchestrationTaskStartPublished;
             //// Publish message to trigger next task.
             //// Orchestrate the next Task (Publish OrchestrationTaskMessage to appropriate topic)
             //// Use OrchestrationTaskTopicDictionary to map task to topic
@@ -81,7 +69,7 @@ internal sealed class PostBindOrchestrationManager : IDisposable
         }
         catch (Exception e)
         {
-            ApplicationLogger.LogError(logEvent, e, nameof(OnOrchestrationReplyMessageReceived), orchestrationMessageReply!);
+            ApplicationLogger.LogError(logEvent, e, nameof(OnOrchestrationReplyMessageReceived), orchestrationReplyMessage!);
         }
     }
 

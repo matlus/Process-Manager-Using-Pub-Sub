@@ -7,7 +7,8 @@ public enum OrchestrationTask
     PayplanEnrollment,
     CreateClient,
     AssociateClientWithPolicy,
-    UpdateIes,
+    SendCoIDocument,
+    UpdateIds,
     TelematicsEnrollment,
     AutoRpmEnrollment
 }

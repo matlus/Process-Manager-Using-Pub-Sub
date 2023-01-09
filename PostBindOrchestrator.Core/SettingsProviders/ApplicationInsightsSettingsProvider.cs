@@ -19,16 +19,16 @@ public static class ApplicationInsightsSettingsProvider
     /// <param name="configurationRoot">The <see cref="IConfigurationRoot"/></param>
     /// <param name="retrieveConfigurationSettingValueOrNull">A Func that returns the configuration setting value or null if the value is missing, empty or white spaces</param>
     /// <returns>A validated MessageBrokerSettings instance</returns>
-    public static ApplicationInsightsSettings GetApplicationInsightsSettings(IConfigurationRoot configurationRoot)
+    public static ApplicationInsightsSettings GetApplicationInsightsSettings(IConfiguration configuration)
     {
-        var applicationInsightsSettingsConfig = GetApplicationInsightsSettingsPreValidated(configurationRoot);
+        var applicationInsightsSettingsConfig = GetApplicationInsightsSettingsPreValidated(configuration);
         Validate(applicationInsightsSettingsConfig);
         return applicationInsightsSettingsConfig;
     }
 
-    public static ApplicationInsightsSettingsConfig GetApplicationInsightsSettingsPreValidated(IConfigurationRoot configurationRoot)
+    public static ApplicationInsightsSettingsConfig GetApplicationInsightsSettingsPreValidated(IConfiguration configuration)
     {
-        var applicationInsightsSettingsConfig = configurationRoot.GetSection(applicationInsightsSettingsKey).Get<ApplicationInsightsSettingsConfig>();
+        var applicationInsightsSettingsConfig = configuration.GetSection(applicationInsightsSettingsKey).Get<ApplicationInsightsSettingsConfig>();
         return applicationInsightsSettingsConfig ?? new ApplicationInsightsSettingsConfig();
     }
 

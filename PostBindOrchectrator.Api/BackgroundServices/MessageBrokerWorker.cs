@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using PostBindOrchestrator.Core;
 using PostBindOrchestrator.DomainLayer;
 
 namespace PostBindOrchestrator.Api;

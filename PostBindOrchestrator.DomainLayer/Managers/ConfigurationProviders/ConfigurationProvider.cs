@@ -6,7 +6,7 @@ namespace PostBindOrchestrator.DomainLayer;
 
 public class ConfigurationProvider
 {
-    private readonly IConfigurationRoot configurationRoot;
+    private readonly IConfiguration configuration;
 
     public ConfigurationProvider()
     {
@@ -14,11 +14,11 @@ public class ConfigurationProvider
         configurationBuilder.AddJsonFile("appsettings.json");
         LoadEnvironmentSpecificAppSettings(configurationBuilder);
         configurationBuilder.AddEnvironmentVariables("PostBindOrc_");
-        configurationRoot = configurationBuilder.Build();
+        configuration = configurationBuilder.Build();
     }
 
     [ExcludeFromCodeCoverage]
-    internal ConfigurationProvider(IConfigurationRoot configurationRoot) => this.configurationRoot = configurationRoot;
+    internal ConfigurationProvider(IConfigurationRoot configurationRoot) => configuration = configurationRoot;
 
     private static void LoadEnvironmentSpecificAppSettings(IConfigurationBuilder configurationBuilder)
     {
@@ -31,32 +31,32 @@ public class ConfigurationProvider
 
     public MessageBrokerSettings GetMessageBrokerSettings()
     {
-        return MessageBrokerSettingsProvider.GetMessageBrokerSettings(configurationRoot);
+        return MessageBrokerSettingsProvider.GetMessageBrokerSettings(configuration);
     }
 
     public ApplicationInsightsSettings GetApplicationInsightsSettings()
     {
-        return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettings(configurationRoot);
+        return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettings(configuration);
     }
 
     public IConfiguration GetLoggingConfiguration()
     {
-        return configurationRoot.GetSection("Logging");
+        return configuration.GetSection("Logging");
     }
 
     internal string? RetrieveConfigurationSettingValue(string key)
     {
-        return configurationRoot[key];
+        return configuration[key];
     }
 
     protected MessageBrokerSettingsConfig GetMessageBrokerSettingsPreValidated()
     {
-        return MessageBrokerSettingsProvider.GetMessageBrokerSettingsPreValidated(configurationRoot);
+        return MessageBrokerSettingsProvider.GetMessageBrokerSettingsPreValidated(configuration);
     }
 
     protected ApplicationInsightsSettingsConfig GetApplicationInsightsSettingsPreValidated()
     {
-        return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettingsPreValidated(configurationRoot);
+        return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettingsPreValidated(configuration);
     }
 
     ////private string? RetrieveConfigurationSettingValueOrNull(string key)

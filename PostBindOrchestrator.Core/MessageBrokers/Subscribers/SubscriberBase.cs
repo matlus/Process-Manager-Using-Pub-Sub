@@ -5,7 +5,7 @@ public abstract class SubscriberBase : IDisposable
     protected string? TopicName { get; set; }
     protected string? QueueName { get; set; }
 
-    public Task Initialize(string connectionString, string topicName, string queueName) => InitializeCore(connectionString, topicName, queueName);
+    public Task Initialize(string connectionString, string topicName, string queueName, CancellationToken cancellationToken) => InitializeCore(connectionString, topicName, queueName, cancellationToken);
 
     public Task Subscribe(Func<SubscriberBase, MessageReceivedEventArgs, Task> receiveCallback, CancellationToken cancellationToken)
     {
@@ -23,7 +23,7 @@ public abstract class SubscriberBase : IDisposable
         GC.SuppressFinalize(this);
     }
 
-    protected abstract Task InitializeCore(string connectionString, string topicName, string queueName);
+    protected abstract Task InitializeCore(string connectionString, string topicName, string queueName, CancellationToken cancellationToken);
 
     protected abstract Task SubscribeCore(Func<SubscriberBase, MessageReceivedEventArgs, Task> receiveCallback, CancellationToken cancellationToken);
 

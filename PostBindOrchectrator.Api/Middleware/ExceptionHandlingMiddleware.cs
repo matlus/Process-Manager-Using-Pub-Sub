@@ -1,4 +1,4 @@
-﻿using PostBindOrchestrator.DomainLayer;
+﻿using PostBindOrchestrator.Core;
 
 namespace PostBindOrchestrator.Api;
 

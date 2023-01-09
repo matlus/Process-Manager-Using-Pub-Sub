@@ -1,4 +1,5 @@
 using PostBindOrchestrator.Api;
+using PostBindOrchestrator.Core;
 using PostBindOrchestrator.DomainLayer;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,11 +11,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddApplicationInsightsTelemetryWorkerService();
 
-builder.Services.AddSingleton<ServiceLocatorBase, ServiceLocator>(sp =>
-{
-    var loggerFactory = sp.GetRequiredService<ILoggerFactory>();
-    return new ServiceLocator(loggerFactory);
-});
+builder.Services.AddSingleton<ServiceLocatorBase, ServiceLocator>();
 
 builder.Services.AddSingleton(sp =>
 {
@@ -22,11 +19,7 @@ builder.Services.AddSingleton(sp =>
     return new ApplicationLogger(serviceLocator.CreateLogger());
 });
 
-builder.Services.AddSingleton(sp =>
-{
-    var serviceLocator = sp.GetRequiredService<ServiceLocatorBase>();
-    return new DomainFacade(serviceLocator);
-});
+builder.Services.AddSingleton<DomainFacade>();
 
 builder.Services.AddScoped<CorrelationIdProvider>();
 builder.Services.AddSingleton<RouteHandlerPostBind>();

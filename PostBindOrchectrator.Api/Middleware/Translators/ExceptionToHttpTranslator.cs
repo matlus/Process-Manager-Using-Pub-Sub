@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.Primitives;
 using PostBindOrchestrator.Core;
-using PostBindOrchestrator.DomainLayer;
 
 namespace PostBindOrchestrator.Api;
 

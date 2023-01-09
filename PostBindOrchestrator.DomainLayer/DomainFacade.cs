@@ -4,9 +4,9 @@ namespace PostBindOrchestrator.DomainLayer;
 
 public sealed class DomainFacade : IDisposable
 {
-    private bool disposed;
     private readonly ServiceLocatorBase serviceLocator;
     private PostBindOrchestrationManager? postBindOrchestrationManager;
+    private bool disposed;
 
     public DomainFacade(ServiceLocatorBase serviceLocator) => this.serviceLocator = serviceLocator;
 

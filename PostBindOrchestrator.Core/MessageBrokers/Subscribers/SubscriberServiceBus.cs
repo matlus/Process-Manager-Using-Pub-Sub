@@ -14,12 +14,12 @@ public sealed class SubscriberServiceBus : SubscriberBase
     private ServiceBusClient? serviceBusClient;
     private ServiceBusReceiver? serviceBusReceiver;
 
-    protected override async Task InitializeCore(string connectionString, string topicName, string queueName)
+    protected override async Task InitializeCore(string connectionString, string topicName, string queueName, CancellationToken cancellationToken)
     {
         TopicName = topicName;
         QueueName = queueName;
 
-        await CreateQueueIfNotExists(connectionString);
+        await CreateQueueIfNotExists(connectionString, cancellationToken);
 
         serviceBusClient = new ServiceBusClient(connectionString, serviceBusClientOptions);
         serviceBusReceiver = serviceBusClient.CreateReceiver(TopicName, QueueName);
@@ -53,16 +53,16 @@ public sealed class SubscriberServiceBus : SubscriberBase
         }
     }
 
-    private async Task CreateQueueIfNotExists(string connectionString)
+    private async Task CreateQueueIfNotExists(string connectionString, CancellationToken cancellationToken)
     {
         var serviceBusAdministrationClient = new ServiceBusAdministrationClient(connectionString);
 
-        var response = await serviceBusAdministrationClient.SubscriptionExistsAsync(TopicName, QueueName);
+        var response = await serviceBusAdministrationClient.SubscriptionExistsAsync(TopicName, QueueName, cancellationToken);
         var subscriptionExists = response.Value;
 
         if (!subscriptionExists)
         {
-            await serviceBusAdministrationClient.CreateSubscriptionAsync(TopicName, QueueName);
+            await serviceBusAdministrationClient.CreateSubscriptionAsync(TopicName, QueueName, cancellationToken);
         }
     }
 
