@@ -13,7 +13,15 @@ public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services => ReplaceService<RouteHandlerPostBind, RouteHandlerPostBindSpy>(services));
         builder.ConfigureServices(services => ReplaceService<RouteHandlerRevertToQuote, RouteHandlerRevertToQuoteSpy>(services));
-        builder.ConfigureServices(services => ReplaceService<ILogger, LoggerSpy>(services));
+
+        var loggerProviderSpy = new LoggerProviderSpy();
+
+        builder.ConfigureServices(services => services.AddSingleton(serviceProvider => loggerProviderSpy));
+        builder.ConfigureServices(service => service.AddLogging(loggerBuilder =>
+            {
+                loggerBuilder.ClearProviders();
+                loggerBuilder.AddProvider(loggerProviderSpy);
+            }));
     }
 
     private static void ReplaceService<TBase, TImplementation>(IServiceCollection serviceCollection) where TBase : class

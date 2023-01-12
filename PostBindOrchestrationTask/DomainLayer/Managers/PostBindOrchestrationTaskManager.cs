@@ -66,9 +66,9 @@ internal sealed class PostBindOrchestrationTaskManager : IDisposable
                 DateTimeOffset.UtcNow,
                 OrchestrationTask.SendCoIDocument,
                 "Completed"), messageId, orchestrationTaskMessage.CorrelationId);
-            logEvent = LogEvent.OrchestrationTaskReplyPublished;            
+            logEvent = LogEvent.OrchestrationTaskReplyPublished;
         }
-        catch (Exception e)        
+        catch (Exception e)
         {
             ApplicationLogger.LogError(logEvent, e, $"{nameof(StartTask)}:catch block", orchestrationTaskMessage);
 

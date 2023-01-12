@@ -28,7 +28,7 @@ public static class ExceptionToHttpTranslator
             logEvent: LogEvent.Middleware,
             exception,
             message: "{Location}: {Step}, {CorrelationId}, {StatusCode}, {ExceptionType} with: {ExceptionMessage}",
-            nameof(Translate),
+            $"{nameof(ExceptionToHttpTranslator)}.{nameof(Translate)}",
             "Middleware",
             corrleationId,
             httpResponse.StatusCode,

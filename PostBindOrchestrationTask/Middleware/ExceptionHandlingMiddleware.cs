@@ -17,13 +17,13 @@ public sealed class ExceptionHandlingMiddleware : IFunctionsWorkerMiddleware
         {
             await next(context);
         }
-        catch (Exception e)        
+        catch (Exception e)
         {
             while (e.InnerException is not null)
             {
                 e = e.InnerException;
             }
-            
+
             if (context.BindingContext.BindingData is not null)
             {
                 var sb = new StringBuilder();

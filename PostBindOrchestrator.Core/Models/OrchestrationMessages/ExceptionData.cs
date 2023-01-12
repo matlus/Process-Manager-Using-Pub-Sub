@@ -25,14 +25,14 @@ public sealed class ExceptionData
         var (reason, category) = GetExceptionReasonAndCategory(exception);
 
         var exceptionData = new ExceptionData(exception.GetType().Name, exception.Message, exception.StackTrace!, reason, category);
-        
+
         var innermostException = exception.GetBaseException();
         if (innermostException is not null && innermostException != exception)
         {
             var (innerReason, innerCategory) = GetExceptionReasonAndCategory(innermostException);
             exceptionData.InnermostException = new ExceptionData(innermostException.GetType().Name, innermostException.Message, innermostException.StackTrace!, innerReason, innerCategory);
         }
-        
+
         return exceptionData;
     }
 

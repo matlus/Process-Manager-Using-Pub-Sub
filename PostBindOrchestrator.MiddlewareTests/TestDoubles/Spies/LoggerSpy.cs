@@ -1,22 +1,36 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
 namespace PostBindOrchestrator.MiddlewareTests;
 
-internal sealed class LoggerSpy : ILogger
+public sealed class LoggerSpy : ILogger
 {
-    public TestMediator TestMediator { get; }
+    public TestMediatorLogger TestMediatorLogger { get; }
 
-    public LoggerSpy(TestMediator testMediator) => TestMediator = testMediator;
+    public LoggerSpy() => TestMediatorLogger = new TestMediatorLogger();
 
-    public IDisposable? BeginScope<TState>(TState state) where TState : notnull => throw new NotImplementedException();
-    public bool IsEnabled(LogLevel logLevel) => throw new NotImplementedException();
+    public IDisposable? BeginScope<TState>(TState state) where TState : notnull => null;
+
+    public bool IsEnabled(LogLevel logLevel) => true;
     public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception? exception, Func<TState, Exception?, string> formatter)
     {
+        TestMediatorLogger.LogLevel = logLevel;
+        TestMediatorLogger.EventId = eventId;
+        TestMediatorLogger.State = state;
+        TestMediatorLogger.Exception = exception;
+        TestMediatorLogger.LogMessage = formatter(state, exception);
+    }
+}
 
-    }    
+public sealed class LoggerProviderSpy : ILoggerProvider
+{
+    public LoggerSpy LoggerSpy { get; }
+
+    public LoggerProviderSpy() => LoggerSpy = new LoggerSpy();
+
+    public ILogger CreateLogger(string categoryName) => LoggerSpy;
+
+    public void Dispose()
+    {
+    }
 }

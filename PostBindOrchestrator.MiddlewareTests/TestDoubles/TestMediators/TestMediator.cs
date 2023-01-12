@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.Logging;
-using PostBindOrchestrator.DomainLayer;
+﻿using PostBindOrchestrator.DomainLayer;
 
 namespace PostBindOrchestrator.MiddlewareTests;
 public sealed class TestMediator
