@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Azure.Messaging.ServiceBus;
+using PostBindOrchestrator.Core;
 
 namespace PostBindOrchestrationTask.DomainLayer;
 
@@ -19,9 +20,9 @@ public sealed class DomainFacade : IDisposable
         }
     }
 
-    public Task StartTask(ServiceBusReceivedMessage serviceBusReceivedMessage, CancellationToken cancellationToken)
+    public Task StartTask(byte[] message, CancellationToken cancellationToken)
     {
-        return PostBindOrchestrationTaskManager.StartTask(serviceBusReceivedMessage, cancellationToken);
+        return PostBindOrchestrationTaskManager.StartTask(message, cancellationToken);
     }
 
     public void Dispose()

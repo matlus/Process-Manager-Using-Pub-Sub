@@ -2,7 +2,7 @@
 
 namespace PostBindOrchestrator.Api;
 
-public sealed class CorrelationIdProvider
+internal sealed class CorrelationIdProvider
 {
     private readonly HttpContext httpContext;
 

@@ -11,15 +11,11 @@ public abstract class PostBindOrchestratorBaseException : Exception
     {
     }
 
-    protected PostBindOrchestratorBaseException(string message)
-        : base(message)
-    {
-    }
+    protected PostBindOrchestratorBaseException(string message, RootCause? rootCause = default)
+        : base(message) => RootCause = rootCause;
 
-    protected PostBindOrchestratorBaseException(string message, Exception innerException)
-        : base(message, innerException)
-    {
-    }
+    protected PostBindOrchestratorBaseException(string message, Exception innerException, RootCause? rootCause = default)
+        : base(message, innerException) => RootCause = rootCause;
 
     protected PostBindOrchestratorBaseException(SerializationInfo info, StreamingContext context)
     : base(info, context)
@@ -28,4 +24,5 @@ public abstract class PostBindOrchestratorBaseException : Exception
 
     public abstract string Reason { get; }
     public abstract string Category { get; }
+    public RootCause? RootCause { get; }
 }

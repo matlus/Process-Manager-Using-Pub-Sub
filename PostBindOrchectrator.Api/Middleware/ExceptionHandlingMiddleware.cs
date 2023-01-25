@@ -2,7 +2,7 @@
 
 namespace PostBindOrchestrator.Api;
 
-public sealed class ExceptionHandlingMiddleware
+internal sealed class ExceptionHandlingMiddleware
 {
     private readonly RequestDelegate next;
     private readonly ApplicationLogger applicationLogger;

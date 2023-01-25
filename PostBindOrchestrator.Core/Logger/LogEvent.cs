@@ -8,9 +8,8 @@ public enum LogEvent
     OrchestrationTaskMessageReceived,
     OrchestrationReplyMessageReceived,
     OrchestrationTaskStarted,
-    OrchestrationTaskStartRecorded,
-    OrchestrationTaskFinished,
-    OrchestrationTaskFinishedRecorded,
-    OrchestrationTaskStartPublished,
-    OrchestrationTaskReplyPublished
+    OrchestrationTaskStartRecord,
+    OrchestrationTaskFinishedRecord,
+    OrchestrationTaskStartPublish,
+    OrchestrationTaskReplyPublish
 }

@@ -1,12 +1,11 @@
-﻿using Azure.Messaging.ServiceBus;
-using PostBindOrchestrator.Core;
+﻿using PostBindOrchestrator.Core;
 using PostBindOrchestrator.Core.Models.OrchestrationMessages;
 
 namespace PostBindOrchestrationTask.DomainLayer;
 
 internal sealed class PostBindOrchestrationTaskManager : IDisposable
 {
-    private const string OrchestrationReplyTopicName = "pbo.orch.reply1.topic";
+    private const string OrchestrationReplyTopicName = "pbo.orch.reply.topic";
     private const string OrchestrationReplyQueueName = "pbo.orch.reply.que";
     private const string OrchestrationExceptionTopicName = "pbo.orch.exception.topic";
     private const string OrchestrationExceptionQueueName = "pbo.orch.exception.que";
@@ -41,32 +40,32 @@ internal sealed class PostBindOrchestrationTaskManager : IDisposable
         }
     }
 
-    public async Task StartTask(ServiceBusReceivedMessage serviceBusReceivedMessage, CancellationToken cancellationToken)
+    public async Task StartTask(byte[] message, CancellationToken cancellationToken)
     {
         var logEvent = LogEvent.StartTask;
-        var orchestrationTaskMessage = GetOrchestrationTaskMessage(serviceBusReceivedMessage.Body);
+        var orchestrationTaskMessage = GetOrchestrationTaskMessage(message);
         logEvent = LogEvent.OrchestrationTaskMessageReceived;
 
         try
         {
             await InitializePublishers();
             logEvent = LogEvent.OrchestrationTaskStarted;
+            
+            logEvent = LogEvent.OrchestrationTaskStartRecord;
             // Create Orchestration Record in Db using orchestrationMessageTask
-            logEvent = LogEvent.OrchestrationTaskStartRecorded;
             // Do the Task
-            logEvent = LogEvent.OrchestrationTaskFinished;
+            logEvent = LogEvent.OrchestrationTaskFinishedRecord;
             // Record Task Finished in Db
-            logEvent = LogEvent.OrchestrationTaskFinishedRecorded;
-            // Publish Reply meesage
+            
             var messageId = Guid.NewGuid().ToString("N");
+            logEvent = LogEvent.OrchestrationTaskReplyPublish;
             await publisherOrchestrationTaskReply!.Publish(new OrchestrationReplyMessage(
                 messageId,
                 orchestrationTaskMessage.CorrelationId,
                 orchestrationTaskMessage.PolicyNumber,
                 DateTimeOffset.UtcNow,
-                OrchestrationTask.SendCoIDocument,
+                PostBindOrchestrator.Core.OrchestrationTask.SendCoIDocument,
                 "Completed"), messageId, orchestrationTaskMessage.CorrelationId);
-            logEvent = LogEvent.OrchestrationTaskReplyPublished;
         }
         catch (Exception e)
         {
@@ -88,9 +87,9 @@ internal sealed class PostBindOrchestrationTaskManager : IDisposable
         }
     }
 
-    private static OrchestrationTaskMessage GetOrchestrationTaskMessage(BinaryData binaryData)
+    private static OrchestrationTaskMessage GetOrchestrationTaskMessage(byte[] message)
     {
-        return ApplicationSerializer.Deserialize<OrchestrationTaskMessage>(binaryData.ToArray());
+        return ApplicationSerializer.Deserialize<OrchestrationTaskMessage>(message);
     }
 
     public void Dispose()
