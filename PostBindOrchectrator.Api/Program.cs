@@ -44,4 +44,4 @@ app.MapRoutesForRouteHandlers();
 
 app.Run();
 
-public partial class Program { }
+internal sealed partial class Program { }

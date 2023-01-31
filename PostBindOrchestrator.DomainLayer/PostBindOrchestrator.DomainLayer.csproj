@@ -16,8 +16,4 @@
 		<ProjectReference Include="..\PostBindOrchestrator.Core\PostBindOrchestrator.Core.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-	  <Folder Include="Managers\ServiceLocators\LoggerProviders\" />
-	</ItemGroup>
-
 </Project>

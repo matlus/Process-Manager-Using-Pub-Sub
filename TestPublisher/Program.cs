@@ -6,8 +6,6 @@ internal static class Program
 {
     private static async Task Main()
     {
-        ////const string OrchestrationTaskTopicName = "pbo.orch.sendcoidocument.topic";
-        const string OrchestrationReplyTopicName = "pbo.orch.reply.topic";
         const string OrchestrationReplyQueueName = "pbo.orch.reply.que";
 
         var MessageBrokerConnectionString = "Endpoint=sb://matlussb.servicebus.windows.net/;SharedAccessKeyName=RootManageSharedAccessKey;SharedAccessKey=CzSajVgYxHaJFLej1kz+CqRupsu10AeP2MU+HBxSv3A=;TransportType=AmqpWebSockets";

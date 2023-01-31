@@ -50,13 +50,13 @@ internal sealed class PostBindOrchestrationTaskManager : IDisposable
         {
             await InitializePublishers();
             logEvent = LogEvent.OrchestrationTaskStarted;
-            
+
             logEvent = LogEvent.OrchestrationTaskStartRecord;
             // Create Orchestration Record in Db using orchestrationMessageTask
             // Do the Task
             logEvent = LogEvent.OrchestrationTaskFinishedRecord;
             // Record Task Finished in Db
-            
+
             var messageId = Guid.NewGuid().ToString("N");
             logEvent = LogEvent.OrchestrationTaskReplyPublish;
             await publisherOrchestrationTaskReply!.Publish(new OrchestrationReplyMessage(

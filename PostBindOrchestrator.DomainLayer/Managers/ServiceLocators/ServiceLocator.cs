@@ -1,20 +1,26 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using PostBindOrchestrator.Core;
 
 namespace PostBindOrchestrator.DomainLayer;
 
 public sealed class ServiceLocator : ServiceLocatorBase
 {
+    private readonly IConfiguration configuration;
     private readonly ILoggerFactory loggerFactory;
     private ConfigurationProvider? configurationProvider;
 
     private ConfigurationProvider ConfigurationProvider => configurationProvider ??= CreateConfigurationProvider();
 
-    public ServiceLocator(ILoggerFactory loggerFactory) => this.loggerFactory = loggerFactory;
+    public ServiceLocator(IConfiguration configuration, ILoggerFactory loggerFactory)
+    {
+        this.configuration = configuration;
+        this.loggerFactory = loggerFactory;
+    }
 
     protected override ConfigurationProvider CreateConfigurationProviderCore()
     {
-        return new ConfigurationProvider();
+        return new ConfigurationProvider(configuration);
     }
 
     protected override PublisherBase CreateMessageBrokerPublisherCore()

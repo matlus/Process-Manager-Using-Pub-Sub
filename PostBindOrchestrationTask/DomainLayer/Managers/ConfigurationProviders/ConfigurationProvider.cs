@@ -8,10 +8,7 @@ public class ConfigurationProvider
 {
     private readonly IConfiguration configuration;
 
-    public ConfigurationProvider(IConfiguration configuration)
-    {
-        this.configuration = configuration;
-    }
+    public ConfigurationProvider(IConfiguration configuration) => this.configuration = configuration;
 
     [ExcludeFromCodeCoverage]
     internal ConfigurationProvider(IConfigurationRoot configurationRoot) => configuration = configurationRoot;

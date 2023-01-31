@@ -17,12 +17,9 @@ var host = new HostBuilder()
         configurationBuilder.AddApplicationInsightsSettings(connectionString);
 
     })
-    .ConfigureServices(serviceCollection =>
-    {
-        serviceCollection
+    .ConfigureServices(serviceCollection => serviceCollection
         .AddSingleton<ServiceLocatorBase, ServiceLocator>()
-        .AddSingleton<DomainFacade>();
-    })
+        .AddSingleton<DomainFacade>())
     .Build();
 
 host.Run();

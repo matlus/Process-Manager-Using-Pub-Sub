@@ -44,7 +44,7 @@ internal sealed class PostBindOrchestrationManager : IDisposable
 
         subscriberOrchestrationReply = serviceLocator.CreateMessageBrokerSubscriber();
         await subscriberOrchestrationReply.Initialize(messageBrokerSettings.MessageBrokerConnectionString, OrchestrationReplyTopicName, OrchestrationReplyQueueName, cancellationToken);
-        await subscriberOrchestrationReply.Subscribe(OnOrchestrationReplyMessageReceived, cancellationToken);        
+        await subscriberOrchestrationReply.Subscribe(OnOrchestrationReplyMessageReceived, cancellationToken);
 
         //// Start listening on the Exception Topic as well
     }
@@ -55,7 +55,7 @@ internal sealed class PostBindOrchestrationManager : IDisposable
 
         var orchestrationTask = OrchestrationTask.SendCoIDocument;
         var publisherTask = serviceLocator.CreateMessageBrokerPublisher();
-        await publisherTask.Initialize(messageBrokerSettings.MessageBrokerConnectionString, $"{MessageBrokerTopicQueuePrefix}.{orchestrationTask.ToString().ToLower()}.{MessageBrokerTopicSufix}" , OrchestrationReplyQueueName);
+        await publisherTask.Initialize(messageBrokerSettings.MessageBrokerConnectionString, $"{MessageBrokerTopicQueuePrefix}.{orchestrationTask.ToString().ToLower()}.{MessageBrokerTopicSufix}", OrchestrationReplyQueueName);
         taskPublishers.Add(orchestrationTask, publisherTask);
 
         orchestrationTask = OrchestrationTask.UpdateIds;

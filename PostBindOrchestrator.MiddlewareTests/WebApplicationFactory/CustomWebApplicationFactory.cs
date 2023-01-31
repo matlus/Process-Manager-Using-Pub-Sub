@@ -7,7 +7,7 @@ using PostBindOrchestrator.Api;
 
 namespace PostBindOrchestrator.MiddlewareTests;
 
-public sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
+internal sealed class CustomWebApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
