@@ -4,9 +4,9 @@ namespace PostBindOrchestrator.Core;
 public sealed class PublisherRabbitMq : PublisherBase
 {
     private bool disposed;
-    private IConnection? connection;
-    private IModel? channel;
-    private string? topicName;
+    private IConnection connection = default!;
+    private IModel channel = default!;
+    private string topicName = default!;
 
     protected override Task InitializeCore(string connectionString, string topicName, string queueName)
     {
@@ -28,11 +28,11 @@ public sealed class PublisherRabbitMq : PublisherBase
 
     protected override Task PublishCore<T>(T message, string messageId, string correlationId)
     {
-        var basicProperties = InitializeBasicProperties(channel!.CreateBasicProperties(), messageId, correlationId, typeof(T));
+        var basicProperties = InitializeBasicProperties(channel.CreateBasicProperties(), messageId, correlationId, typeof(T));
 
         var messageBody = SerializeMessage(message);
 
-        channel.BasicPublish(topicName!, routingKey: string.Empty, basicProperties, messageBody);
+        channel.BasicPublish(topicName, routingKey: string.Empty, basicProperties, messageBody);
 
         return Task.CompletedTask;
     }
@@ -41,11 +41,11 @@ public sealed class PublisherRabbitMq : PublisherBase
     {
         if (disposing && !disposed)
         {
-            channel?.Close();
-            channel?.Dispose();
+            channel.Close();
+            channel.Dispose();
 
-            connection?.Close();
-            connection?.Dispose();
+            connection.Close();
+            connection.Dispose();
 
             disposed = true;
         }

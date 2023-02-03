@@ -6,26 +6,22 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddHttpContextAccessor();
-builder.Services.AddApplicationInsightsTelemetryWorkerService();
-
-builder.Services.AddSingleton<ServiceLocatorBase, ServiceLocator>();
-
-builder.Services.AddSingleton(sp =>
-{
-    var serviceLocator = sp.GetRequiredService<ServiceLocatorBase>();
-    return new ApplicationLogger(serviceLocator.CreateLogger());
-});
-
-builder.Services.AddSingleton<DomainFacade>();
-
-builder.Services.AddScoped<CorrelationIdProvider>();
-builder.Services.AddSingleton<RouteHandlerPostBind>();
-builder.Services.AddSingleton<RouteHandlerRevertToQuote>();
-
-builder.Services.AddHostedService<MessageBrokerWorker>();
+builder.Services
+    .AddEndpointsApiExplorer()
+    .AddSwaggerGen()
+    .AddHttpContextAccessor()
+    .AddApplicationInsightsTelemetryWorkerService()
+    .AddSingleton<ServiceLocatorBase, ServiceLocator>()
+    .AddSingleton(sp =>
+        {
+            var serviceLocator = sp.GetRequiredService<ServiceLocatorBase>();
+            return new ApplicationLogger(serviceLocator.CreateLogger());
+        })
+    .AddSingleton<DomainFacade>()
+    .AddScoped<CorrelationIdProvider>()
+    .AddSingleton<RouteHandlerPostBind>()
+    .AddSingleton<RouteHandlerRevertToQuote>()
+    .AddHostedService<MessageBrokerWorker>();
 
 var app = builder.Build();
 

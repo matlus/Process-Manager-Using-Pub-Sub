@@ -11,8 +11,8 @@ public sealed class SubscriberServiceBus : SubscriberBase
     };
 
     private bool disposed;
-    private ServiceBusClient? serviceBusClient;
-    private ServiceBusReceiver? serviceBusReceiver;
+    private ServiceBusClient serviceBusClient = default!;
+    private ServiceBusReceiver serviceBusReceiver = default!;
 
     protected override async Task InitializeCore(string connectionString, string topicName, string queueName, CancellationToken cancellationToken)
     {
@@ -27,7 +27,7 @@ public sealed class SubscriberServiceBus : SubscriberBase
 
     protected override async Task SubscribeCore(Func<SubscriberBase, MessageReceivedEventArgs, Task> receiveCallback, CancellationToken cancellationToken)
     {
-        await foreach (var serviceBusReceivedMessage in serviceBusReceiver!.ReceiveMessagesAsync(cancellationToken))
+        await foreach (var serviceBusReceivedMessage in serviceBusReceiver.ReceiveMessagesAsync(cancellationToken))
         {
             var messageType = GetHeaderValue(serviceBusReceivedMessage.ApplicationProperties, "MessageType");
             var bytes = serviceBusReceivedMessage.Body.ToArray();
@@ -41,14 +41,14 @@ public sealed class SubscriberServiceBus : SubscriberBase
 
     protected override async Task AcknowledgeCore(object acknowledgetoken, CancellationToken cancellationToken)
     {
-        await serviceBusReceiver!.CompleteMessageAsync((ServiceBusReceivedMessage)acknowledgetoken, cancellationToken);
+        await serviceBusReceiver.CompleteMessageAsync((ServiceBusReceivedMessage)acknowledgetoken, cancellationToken);
     }
 
     protected override async Task Dispose(bool disposing)
     {
         if (disposing && !disposed)
         {
-            await serviceBusClient!.DisposeAsync();
+            await serviceBusClient.DisposeAsync();
             disposed = true;
         }
     }

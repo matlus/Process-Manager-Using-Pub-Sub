@@ -5,8 +5,8 @@ namespace PostBindOrchestrator.Core;
 public sealed class PublisherServiceBus : PublisherBase
 {
     private bool disposed;
-    private ServiceBusClient? serviceBusClient;
-    private ServiceBusSender? serviceBusSender;
+    private ServiceBusClient serviceBusClient = default!;
+    private ServiceBusSender serviceBusSender = default!;
 
     private static readonly ServiceBusClientOptions serviceBusClientOptions = new()
     {
@@ -19,7 +19,7 @@ public sealed class PublisherServiceBus : PublisherBase
         TopicName = topicName;
 
         serviceBusClient = new ServiceBusClient(connectionString, serviceBusClientOptions);
-        serviceBusSender = serviceBusClient!.CreateSender(TopicName);
+        serviceBusSender = serviceBusClient.CreateSender(TopicName);
 
         return Task.CompletedTask;
     }
@@ -29,14 +29,14 @@ public sealed class PublisherServiceBus : PublisherBase
         var messageBody = SerializeMessage(message);
         var serviceBusMessage = InitializeMessageProperties(messageBody, messageId, correlationId, typeof(T));
 
-        await serviceBusSender!.SendMessageAsync(serviceBusMessage);
+        await serviceBusSender.SendMessageAsync(serviceBusMessage);
     }
 
     protected override async Task Dispose(bool disposing)
     {
         if (disposing && !disposed)
         {
-            await serviceBusClient!.DisposeAsync();
+            await serviceBusClient.DisposeAsync();
 
             disposed = true;
         }

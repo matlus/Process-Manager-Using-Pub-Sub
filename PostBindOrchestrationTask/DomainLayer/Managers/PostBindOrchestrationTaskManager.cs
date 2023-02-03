@@ -70,6 +70,7 @@ internal sealed class PostBindOrchestrationTaskManager : IDisposable
         catch (Exception e)
         {
             ApplicationLogger.LogError(logEvent, e, $"{nameof(StartTask)}:catch block", orchestrationTaskMessage);
+            var exceptionData = (ExceptionData)e;
 
             var messageId = Guid.NewGuid().ToString("N");
             var orchestrationExceptionMessage = new OrchestrationExceptionMessage(
@@ -79,10 +80,10 @@ internal sealed class PostBindOrchestrationTaskManager : IDisposable
                 DateTimeOffset.UtcNow,
                 OrchestrationTask.SendCoIDocument,
                 logEvent,
-                (ExceptionData)e);
+                exceptionData);
 
             // TODO: Record Exception to Db
-            //// await DataFacade.RecordTaskException(orchestrationExceptionMessage);            
+            //// await DataFacade.RecordTaskException(orchestrationExceptionMessage, exceptionData);
             await publisherOrchestrationTaskEception!.Publish(orchestrationExceptionMessage, messageId, orchestrationTaskMessage.CorrelationId);
         }
     }

@@ -6,9 +6,9 @@ namespace PostBindOrchestrator.Core;
 public sealed class SubscriberRabbitMq : SubscriberBase
 {
     private bool disposed;
-    private IConnection? connection;
-    private IModel? channel;
-    private string? queueName;
+    private IConnection connection = default!;
+    private IModel channel = default!;
+    private string queueName = default!;
 
     protected override Task InitializeCore(string connectionString, string topicName, string queueName, CancellationToken cancellationToken)
     {
@@ -31,7 +31,7 @@ public sealed class SubscriberRabbitMq : SubscriberBase
 
     protected override Task SubscribeCore(Func<SubscriberBase, MessageReceivedEventArgs, Task> receiveCallback, CancellationToken cancellationToken)
     {
-        var consumer = new EventingBasicConsumer(channel!);
+        var consumer = new EventingBasicConsumer(channel);
 
         consumer.Received += async (model, ea) =>
         {
@@ -43,14 +43,14 @@ public sealed class SubscriberRabbitMq : SubscriberBase
             await receiveCallback(this, messageReceivedEventArgs);
         };
 
-        channel!.BasicConsume(queueName, autoAck: false, consumer);
+        channel.BasicConsume(queueName, autoAck: false, consumer);
 
         return Task.CompletedTask;
     }
 
     protected override Task AcknowledgeCore(object acknowledgetoken, CancellationToken cancellationToken)
     {
-        channel!.BasicAck((ulong)acknowledgetoken, multiple: false);
+        channel.BasicAck((ulong)acknowledgetoken, multiple: false);
 
         return Task.CompletedTask;
     }
@@ -59,8 +59,11 @@ public sealed class SubscriberRabbitMq : SubscriberBase
     {
         if (disposing && !disposed)
         {
-            connection?.Close();
-            connection?.Dispose();
+            channel.Close();
+            channel.Dispose();
+            
+            connection.Close();
+            connection.Dispose();
 
             disposed = true;
         }

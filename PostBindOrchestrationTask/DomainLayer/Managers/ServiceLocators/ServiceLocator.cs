@@ -10,7 +10,7 @@ public sealed class ServiceLocator : ServiceLocatorBase
     private readonly ILoggerFactory loggerFactory;
     private ConfigurationProvider? configurationProvider;
 
-    private ConfigurationProvider ConfigurationProvider => configurationProvider ??= CreateConfigurationProvider();
+    private ConfigurationProvider ConfigurationProvider => configurationProvider ??= new ConfigurationProvider(configuration);
 
     public ServiceLocator(IConfiguration configuration, ILoggerFactory loggerFactory)
     {
@@ -20,7 +20,7 @@ public sealed class ServiceLocator : ServiceLocatorBase
 
     protected override ConfigurationProvider CreateConfigurationProviderCore()
     {
-        return new ConfigurationProvider(configuration);
+        return ConfigurationProvider;
     }
 
     protected override PublisherBase CreateMessageBrokerPublisherCore()
