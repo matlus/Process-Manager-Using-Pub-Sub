@@ -1,3 +1,5 @@
+using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.Extensibility;
 using PostBindOrchestrator.Api;
 using PostBindOrchestrator.Core;
 using PostBindOrchestrator.DomainLayer;
@@ -21,6 +23,7 @@ builder.Services
     .AddScoped<CorrelationIdProvider>()
     .AddSingleton<RouteHandlerPostBind>()
     .AddSingleton<RouteHandlerRevertToQuote>()
+    .AddSingleton<ITelemetryInitializer, MyTelemetryInitializer>()
     .AddHostedService<MessageBrokerWorker>();
 
 var app = builder.Build();
@@ -41,3 +44,11 @@ app.MapRoutesForRouteHandlers();
 app.Run();
 
 internal sealed partial class Program { }
+
+internal sealed class MyTelemetryInitializer : ITelemetryInitializer
+{
+    public void Initialize(ITelemetry telemetry)
+    {
+        telemetry.Context.Cloud.RoleName = "PostBindOrchestrator";
+    }
+}
