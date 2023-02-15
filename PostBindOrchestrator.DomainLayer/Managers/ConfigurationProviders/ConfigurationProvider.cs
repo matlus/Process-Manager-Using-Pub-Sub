@@ -12,6 +12,11 @@ public class ConfigurationProvider
         this.configuration = configuration;
     }
 
+    public string GetRoleName()
+    {
+        return "PostBindOrchestrator";
+    }
+
     public MessageBrokerSettings GetMessageBrokerSettings()
     {
         return MessageBrokerSettingsProvider.GetMessageBrokerSettings(configuration);

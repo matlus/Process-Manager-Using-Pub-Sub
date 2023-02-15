@@ -1,6 +1,6 @@
-using Microsoft.ApplicationInsights.Channel;
 using Microsoft.ApplicationInsights.Extensibility;
 using PostBindOrchestrator.Api;
+using PostBindOrchestrator.Api.Providers;
 using PostBindOrchestrator.Core;
 using PostBindOrchestrator.DomainLayer;
 
@@ -19,11 +19,17 @@ builder.Services
             var serviceLocator = sp.GetRequiredService<ServiceLocatorBase>();
             return new ApplicationLogger(serviceLocator.CreateLogger());
         })
+    .AddSingleton<ITelemetryInitializer, RoleNameTelemetryInitializer>(serviceProvider =>
+    {
+        var serviceLocator = serviceProvider.GetRequiredService<ServiceLocatorBase>();
+        var configurationProvider = serviceLocator.CreateConfigurationProvider();
+        var roleName = configurationProvider.GetRoleName();
+        return new RoleNameTelemetryInitializer(roleName);
+    })
     .AddSingleton<DomainFacade>()
     .AddScoped<CorrelationIdProvider>()
     .AddSingleton<RouteHandlerPostBind>()
     .AddSingleton<RouteHandlerRevertToQuote>()
-    .AddSingleton<ITelemetryInitializer, MyTelemetryInitializer>()
     .AddHostedService<MessageBrokerWorker>();
 
 var app = builder.Build();
@@ -44,11 +50,3 @@ app.MapRoutesForRouteHandlers();
 app.Run();
 
 internal sealed partial class Program { }
-
-internal sealed class MyTelemetryInitializer : ITelemetryInitializer
-{
-    public void Initialize(ITelemetry telemetry)
-    {
-        telemetry.Context.Cloud.RoleName = "PostBindOrchestrator";
-    }
-}
