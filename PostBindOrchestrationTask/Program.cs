@@ -24,4 +24,7 @@ var host = new HostBuilder()
 
 host.Run();
 
-internal sealed partial class Program { }
+internal sealed partial class Program
+{
+    private Program() { }
+}

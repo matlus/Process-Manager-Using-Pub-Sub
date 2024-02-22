@@ -8,10 +8,10 @@ public sealed class ServiceLocator : ServiceLocatorBase
 {
     private readonly IConfiguration configuration;
     private readonly ILoggerFactory loggerFactory;
-    private ConfigurationProvider? configurationProvider;
+    private ConfigurationProvider configurationProvider = default!;
 
     private ConfigurationProvider ConfigurationProvider => configurationProvider ??= new ConfigurationProvider(configuration);
- 
+
     public ServiceLocator(IConfiguration configuration, ILoggerFactory loggerFactory)
     {
         this.configuration = configuration;

@@ -10,7 +10,7 @@
 	<ItemGroup>
 		<None Remove="appsettings.Development.json" />
 		<None Remove="appsettings.json" />
-		<InternalsVisibleTo Include="PostBindOrchestrationTask.Tests"/>
+		<InternalsVisibleTo Include="PostBindOrchestrationTask.Tests" />
 	</ItemGroup>
 	<ItemGroup>
 		<Content Include="ApplicationSettings\appsettings.Development.json">
@@ -25,12 +25,12 @@
 		</Content>
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.11.1" />
+		<PackageReference Include="Azure.Messaging.ServiceBus" Version="7.17.0" />
 		<PackageReference Include="Microsoft.Azure.Functions.Extensions" Version="1.1.0" />
-		<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.10.0" />
-		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.ServiceBus" Version="5.7.0" />
-		<PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.7.0" />
-		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="5.8.1" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker" Version="1.20.0" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Extensions.ServiceBus" Version="5.14.1" />
+		<PackageReference Include="Microsoft.Azure.Functions.Worker.Sdk" Version="1.16.2" />
+		<PackageReference Include="Microsoft.Azure.WebJobs.Extensions.ServiceBus" Version="5.13.4" />
 		<PackageReference Include="Microsoft.ApplicationInsights.WorkerService" Version="2.21.0" />
 		<PackageReference Include="Microsoft.Extensions.Logging.ApplicationInsights" Version="2.21.0" />
 	</ItemGroup>

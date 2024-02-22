@@ -59,7 +59,7 @@ public sealed class PublisherRabbitMq : PublisherBase
         basicProperties.MessageId = messageId;
         basicProperties.CorrelationId = correlationId;
         basicProperties.ContentType = "application/json";
-        basicProperties.Type = messageType.GetType().Name;
+        basicProperties.Type = messageType.Name;
 
         var propertiesDictionary = new Dictionary<string, object>();
         basicProperties.Headers = propertiesDictionary;

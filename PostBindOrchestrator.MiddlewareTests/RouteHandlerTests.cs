@@ -14,9 +14,11 @@ using Xunit;
 using Xunit.Sdk;
 
 namespace PostBindOrchestrator.MiddlewareTests;
-public class RouteHandlerTests
+
+public sealed class RouteHandlerTests : IDisposable
 {
     private readonly WebApplicationFactory<Program> webApplicationFactory;
+    private bool disposed;
 
     public RouteHandlerTests() => webApplicationFactory = new CustomWebApplicationFactory();
 
@@ -211,7 +213,7 @@ public class RouteHandlerTests
 
         foreach (var item in expectedlogState)
         {
-            KeyValuePair<string, object?> logStateKvp = actualLogState.Single(kvp => kvp.Key == item.Key);
+            var logStateKvp = actualLogState.Single(kvp => kvp.Key == item.Key);
 
             if (logStateKvp.Key is null)
             {
@@ -256,6 +258,21 @@ public class RouteHandlerTests
         if (!httpResponseMessage.IsSuccessStatusCode)
         {
             throw new XunitException($"Expected HTTP Status Code 200, but Received HTTP Status Code: {httpResponseMessage.StatusCode}, with Reason Phrase: {httpResponseMessage.ReasonPhrase}, with Content: {await httpResponseMessage.Content.ReadAsStringAsync()}");
+        }
+    }
+
+    public void Dispose()
+    {
+        Dispose(true);
+        GC.SuppressFinalize(this);
+    }
+
+    private void Dispose(bool disposing)
+    {
+        if (disposing && !disposed)
+        {
+            webApplicationFactory.Dispose();
+            disposed = true;
         }
     }
 }

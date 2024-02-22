@@ -12,10 +12,10 @@ internal sealed class PostBindOrchestrationManager : IDisposable
 
     private readonly ServiceLocatorBase serviceLocator;
     private bool disposed;
-    private ConfigurationProvider? configurationProvider;
-    private ApplicationLogger? applicationLogger;
-    private SubscriberBase? subscriberOrchestrationReply;
-    private Dictionary<OrchestrationTask, PublisherBase>? taskPublishers;
+    private ConfigurationProvider configurationProvider = default!;
+    private ApplicationLogger applicationLogger = default!;
+    private SubscriberBase subscriberOrchestrationReply = default!;
+    private Dictionary<OrchestrationTask, PublisherBase> taskPublishers = default!;
 
     private ConfigurationProvider ConfigurationProvider => configurationProvider ??= serviceLocator.CreateConfigurationProvider();
 

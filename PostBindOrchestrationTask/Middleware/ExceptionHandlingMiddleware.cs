@@ -2,6 +2,7 @@
 using Microsoft.Azure.Functions.Worker;
 using Microsoft.Azure.Functions.Worker.Middleware;
 using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace PostBindOrchestrationTask;
 
@@ -33,14 +34,12 @@ public sealed class ExceptionHandlingMiddleware : IFunctionsWorkerMiddleware
                 values.Add(e.GetType().Name);
                 values.Add("Technical");
                 values.Add(e.Message);
-
-                foreach (var item in context.BindingContext.BindingData)
+                foreach (var item in from item in context.BindingContext.BindingData
+                                     where item.Value is not null
+                                     select item)
                 {
-                    if (item.Value is not null)
-                    {
-                        sb.Append($"{{{item.Key}}}, ");
-                        values.Add(item.Value);
-                    }
+                    sb.Append($"{{{item.Key}}}, ");
+                    values.Add(item.Value);
                 }
 
                 _logger.LogError(e, sb.ToString(), values.ToArray());

@@ -12,20 +12,14 @@ builder.Services
     .AddEndpointsApiExplorer()
     .AddSwaggerGen()
     .AddHttpContextAccessor()
-    .AddApplicationInsightsTelemetryWorkerService()
+    .AddApplicationInsightsTelemetry()
     .AddSingleton<ServiceLocatorBase, ServiceLocator>()
     .AddSingleton(sp =>
         {
             var serviceLocator = sp.GetRequiredService<ServiceLocatorBase>();
             return new ApplicationLogger(serviceLocator.CreateLogger());
         })
-    .AddSingleton<ITelemetryInitializer, RoleNameTelemetryInitializer>(serviceProvider =>
-    {
-        var serviceLocator = serviceProvider.GetRequiredService<ServiceLocatorBase>();
-        var configurationProvider = serviceLocator.CreateConfigurationProvider();
-        var roleName = configurationProvider.GetRoleName();
-        return new RoleNameTelemetryInitializer(roleName);
-    })
+    .AddSingleton<ITelemetryInitializer, RoleNameTelemetryInitializer>(serviceProvider => new RoleNameTelemetryInitializer(PostBindOrchestrator.DomainLayer.ConfigurationProvider.GetRoleName()))
     .AddSingleton<DomainFacade>()
     .AddScoped<CorrelationIdProvider>()
     .AddSingleton<RouteHandlerPostBind>()
@@ -49,4 +43,7 @@ app.MapRoutesForRouteHandlers();
 
 app.Run();
 
-internal sealed partial class Program { }
+internal sealed partial class Program
+{
+    private Program() { }
+}

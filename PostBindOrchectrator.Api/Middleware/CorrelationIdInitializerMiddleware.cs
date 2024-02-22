@@ -1,6 +1,4 @@
-﻿using Microsoft.Extensions.Primitives;
-
-namespace PostBindOrchestrator.Api;
+﻿namespace PostBindOrchestrator.Api;
 
 internal sealed class CorrelationIdInitializerMiddleware
 {
@@ -10,9 +8,9 @@ internal sealed class CorrelationIdInitializerMiddleware
 
     public async Task InvokeAsync(HttpContext httpContext)
     {
-        if (httpContext.Request.Headers.TryGetValue("X-Correlation-Id", out StringValues values) && values.Any())
+        if (httpContext.Request.Headers.TryGetValue("X-Correlation-Id", out var stringValues) && stringValues.Count > 0)
         {
-            var corrleationId = values.First()!;
+            var corrleationId = stringValues[0]!;
             httpContext.Items["CorrelationId"] = corrleationId;
         }
 

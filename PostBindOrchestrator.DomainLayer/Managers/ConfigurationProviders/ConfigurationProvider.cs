@@ -7,15 +7,9 @@ public class ConfigurationProvider
 {
     private readonly IConfiguration configuration;
 
-    public ConfigurationProvider(IConfiguration configuration)
-    {
-        this.configuration = configuration;
-    }
+    public ConfigurationProvider(IConfiguration configuration) => this.configuration = configuration;
 
-    public string GetRoleName()
-    {
-        return "PostBindOrchestrator";
-    }
+    public static string GetRoleName() => "PostBindOrchestrator";
 
     public MessageBrokerSettings GetMessageBrokerSettings()
     {

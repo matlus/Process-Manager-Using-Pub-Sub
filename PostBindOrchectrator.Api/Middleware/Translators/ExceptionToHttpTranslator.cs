@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http.Features;
-using Microsoft.Extensions.Primitives;
 using PostBindOrchestrator.Core;
 
 namespace PostBindOrchestrator.Api;
@@ -19,9 +18,9 @@ public static class ExceptionToHttpTranslator
         httpResponse.StatusCode = MapExceptionToStatusCode(exception);
 
         string? corrleationId = null;
-        if (httpContext.Request.Headers.TryGetValue("X-Correlation-Id", out StringValues values) && values.Any())
+        if (httpContext.Request.Headers.TryGetValue("X-Correlation-Id", out var stringValues) && stringValues.Count > 0)
         {
-            corrleationId = values.First()!;
+            corrleationId = stringValues[0];
         }
 
         appLogger.LogError(

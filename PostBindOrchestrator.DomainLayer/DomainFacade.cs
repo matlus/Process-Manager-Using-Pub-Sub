@@ -10,13 +10,7 @@ public sealed class DomainFacade : IDisposable
 
     public DomainFacade(ServiceLocatorBase serviceLocator) => this.serviceLocator = serviceLocator;
 
-    private PostBindOrchestrationManager PostBindOrchestrationManager
-    {
-        get
-        {
-            return postBindOrchestrationManager ??= new PostBindOrchestrationManager(serviceLocator);
-        }
-    }
+    private PostBindOrchestrationManager PostBindOrchestrationManager => postBindOrchestrationManager ??= new PostBindOrchestrationManager(serviceLocator);
 
     public Task StartListening(CancellationToken cancellationToken)
     {
