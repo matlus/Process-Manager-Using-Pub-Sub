@@ -16,6 +16,11 @@ public class ConfigurationProvider
         return MessageBrokerSettingsProvider.GetMessageBrokerSettings(configuration);
     }
 
+    public AzureAdSettings GetAzureAdSettings()
+    {
+        return AzureAdSettingsProvider.GetAzureAdSettings(configuration);
+    }
+
     public ApplicationInsightsSettings GetApplicationInsightsSettings()
     {
         return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettings(configuration);
@@ -40,10 +45,4 @@ public class ConfigurationProvider
     {
         return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettingsPreValidated(configuration);
     }
-
-    ////private string? RetrieveConfigurationSettingValueOrNull(string key)
-    ////{
-    ////    var value = RetrieveConfigurationSettingValue(key);
-    ////    return ValidatorString.GetValueOrNull(value);
-    ////}
 }
