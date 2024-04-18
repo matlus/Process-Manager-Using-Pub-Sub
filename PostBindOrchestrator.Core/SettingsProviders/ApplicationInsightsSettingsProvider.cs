@@ -21,12 +21,12 @@ public static class ApplicationInsightsSettingsProvider
     /// <returns>A validated MessageBrokerSettings instance</returns>
     public static ApplicationInsightsSettings GetApplicationInsightsSettings(IConfiguration configuration)
     {
-        var applicationInsightsSettingsConfig = GetApplicationInsightsSettingsPreValidated(configuration);
+        var applicationInsightsSettingsConfig = GetApplicationInsightsSettingsUnValidated(configuration);
         Validate(applicationInsightsSettingsConfig);
         return applicationInsightsSettingsConfig;
     }
 
-    public static ApplicationInsightsSettingsConfig GetApplicationInsightsSettingsPreValidated(IConfiguration configuration)
+    public static ApplicationInsightsSettingsConfig GetApplicationInsightsSettingsUnValidated(IConfiguration configuration)
     {
         var applicationInsightsSettingsConfig = configuration.GetSection(applicationInsightsSettingsKey).Get<ApplicationInsightsSettingsConfig>();
         return applicationInsightsSettingsConfig ?? new ApplicationInsightsSettingsConfig();
@@ -44,6 +44,6 @@ public static class ApplicationInsightsSettingsProvider
 
     private static string? ValidateApplicationInsightsSettingsConfig(ApplicationInsightsSettingsConfig applicationInsightsSettingsConfig)
     {
-        return ValidatorString.Validate("ApplicationInsights.ConnectionString", applicationInsightsSettingsConfig.ConnectionString);
+        return ValidatorString.Validate($"{applicationInsightsSettingsKey}.{nameof(ApplicationInsightsSettings.ConnectionString)}", applicationInsightsSettingsConfig.ConnectionString);
     }
 }

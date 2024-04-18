@@ -1,3 +1,3 @@
 ﻿namespace PostBindOrchestrator.Core;
 
-public sealed record MessageBrokerSettings(string MessageBrokerConnectionString, MessageBrokerType MessageBrokerType);
+public sealed record MessageBrokerSettings(string ConnectionString, MessageBrokerType MessageBrokerType);

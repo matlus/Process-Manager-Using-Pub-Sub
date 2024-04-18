@@ -26,12 +26,12 @@ public static class MessageBrokerSettingsProvider
     /// <returns>A validated MessageBrokerSettings instance</returns>
     public static MessageBrokerSettings GetMessageBrokerSettings(IConfiguration configuration)
     {
-        var messageBrokerSettingsConfig = GetMessageBrokerSettingsPreValidated(configuration);
+        var messageBrokerSettingsConfig = GetMessageBrokerSettingsUnValidated(configuration);
         Validate(messageBrokerSettingsConfig);
         return messageBrokerSettingsConfig;
     }
 
-    public static MessageBrokerSettingsConfig GetMessageBrokerSettingsPreValidated(IConfiguration configuration)
+    public static MessageBrokerSettingsConfig GetMessageBrokerSettingsUnValidated(IConfiguration configuration)
     {
         var messageBrokerSettingsConfig = configuration.GetSection(messageBrokerSettingsKey).Get<MessageBrokerSettingsConfig>();
 
@@ -68,7 +68,7 @@ public static class MessageBrokerSettingsProvider
 
     private static void ValidateMessageBrokerSettingsConfig(StringBuilder errorMessages, MessageBrokerSettingsConfig messageBrokerSettingsConfig)
     {
-        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"MessageBrokerSettings.MessageBrokerConnectionString", messageBrokerSettingsConfig.MessageBrokerConnectionString));
-        errorMessages.AppendLineIfNotNull(ValidatorString.Validate("MessageBrokerSettings.MessageBrokerType", messageBrokerSettingsConfig.MessageBrokerType.ToString()));
+        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{messageBrokerSettingsKey}.{nameof(MessageBrokerSettings.ConnectionString)}", messageBrokerSettingsConfig.ConnectionString));
+        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{messageBrokerSettingsKey}.{nameof(MessageBrokerSettings.MessageBrokerType)}", messageBrokerSettingsConfig.MessageBrokerType.ToString()));
     }
 }

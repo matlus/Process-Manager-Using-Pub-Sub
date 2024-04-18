@@ -6,12 +6,6 @@ namespace PostBindOrchestrator.Core;
 public static class AzureAdSettingsProvider
 {
     private const string azureAdSettingsKey = "AzureAd";
-    private const string instancePropertyName = "Instance";
-    private const string clientIdPropertyName = "ClientId";
-    private const string clientSecretPropertyName = "ClientSecret";
-    private const string domainPropertyName = "Domain";
-    private const string tenantIdPropertyName = "TenantId";
-    private const string audiencePropertyName = "Audience";
 
     /// <summary> 
     ///  
@@ -35,12 +29,12 @@ public static class AzureAdSettingsProvider
     /// <returns>A validated AzureAdSettings instance</returns>
     public static AzureAdSettings GetAzureAdSettings(IConfiguration configuration)
     {
-        var messageBrokerSettingsConfig = GetAzureAdSettingsPreValidated(configuration);
-        Validate(messageBrokerSettingsConfig);
-        return messageBrokerSettingsConfig;
+        var azureAdSettingsConfig = GetAzureAdSettingsUnValidated(configuration);
+        Validate(azureAdSettingsConfig);
+        return azureAdSettingsConfig;
     }
 
-    public static AzureAdSettingsConfig GetAzureAdSettingsPreValidated(IConfiguration configuration)
+    public static AzureAdSettingsConfig GetAzureAdSettingsUnValidated(IConfiguration configuration)
     {
         var azureAdSettingsConfig = configuration.GetSection(azureAdSettingsKey).Get<AzureAdSettingsConfig>();
         return azureAdSettingsConfig ?? new AzureAdSettingsConfig();
@@ -60,11 +54,11 @@ public static class AzureAdSettingsProvider
 
     private static void ValidateAzureAdSettingsConfig(StringBuilder errorMessages, AzureAdSettingsConfig azureAdSettingsConfig)
     {
-        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{azureAdSettingsKey}Settings.{instancePropertyName}", azureAdSettingsConfig.Instance));
-        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{azureAdSettingsKey}Settings.{clientIdPropertyName}", azureAdSettingsConfig.ClientId));
-        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{azureAdSettingsKey}Settings.{clientSecretPropertyName}", azureAdSettingsConfig.ClientSecret));
-        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{azureAdSettingsKey}Settings.{domainPropertyName}", azureAdSettingsConfig.Domain));
-        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{azureAdSettingsKey}Settings.{tenantIdPropertyName}", azureAdSettingsConfig.TenantId));
-        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{azureAdSettingsKey}Settings.{audiencePropertyName}", azureAdSettingsConfig.Audience));
+        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{azureAdSettingsKey}.{nameof(AzureAdSettings.Instance)}", azureAdSettingsConfig.Instance));
+        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{azureAdSettingsKey}.{nameof(AzureAdSettings.ClientId)}", azureAdSettingsConfig.ClientId));
+        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{azureAdSettingsKey}.{nameof(AzureAdSettings.ClientSecret)}", azureAdSettingsConfig.ClientSecret));
+        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{azureAdSettingsKey}.{nameof(AzureAdSettings.Domain)}", azureAdSettingsConfig.Domain));
+        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{azureAdSettingsKey}.{nameof(AzureAdSettings.TenantId)}", azureAdSettingsConfig.TenantId));
+        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{azureAdSettingsKey}.{nameof(AzureAdSettings.Audience)}", azureAdSettingsConfig.Audience));
     }
 }

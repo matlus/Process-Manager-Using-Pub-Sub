@@ -31,10 +31,10 @@ internal sealed class PostBindOrchestrationTaskManager : IDisposable
             var messageBrokerSettings = ConfigurationProvider.GetMessageBrokerSettings();
 
             publisherOrchestrationTaskReply = serviceLocator.CreateMessageBrokerPublisher();
-            await publisherOrchestrationTaskReply.Initialize(messageBrokerSettings.MessageBrokerConnectionString, OrchestrationReplyTopicName, OrchestrationReplyQueueName);
+            await publisherOrchestrationTaskReply.Initialize(messageBrokerSettings.ConnectionString, OrchestrationReplyTopicName, OrchestrationReplyQueueName);
 
             publisherOrchestrationTaskEception = serviceLocator.CreateMessageBrokerPublisher();
-            await publisherOrchestrationTaskEception.Initialize(messageBrokerSettings.MessageBrokerConnectionString, OrchestrationExceptionTopicName, OrchestrationExceptionQueueName);
+            await publisherOrchestrationTaskEception.Initialize(messageBrokerSettings.ConnectionString, OrchestrationExceptionTopicName, OrchestrationExceptionQueueName);
 
             publishersHaveBeenInitialized = true;
         }

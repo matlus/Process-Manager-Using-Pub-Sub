@@ -26,6 +26,11 @@ public class ConfigurationProvider
         return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettings(configuration);
     }
 
+    public KeyVaultSettings GetKeyVaultSettings()
+    {
+        return KeyVaultSettingsProvider.GetKeyVaultSettings(configuration);
+    }
+
     public IConfiguration GetLoggingConfiguration()
     {
         return configuration.GetSection("Logging");
@@ -36,13 +41,18 @@ public class ConfigurationProvider
         return configuration[key];
     }
 
-    protected MessageBrokerSettingsConfig GetMessageBrokerSettingsPreValidated()
+    protected MessageBrokerSettingsConfig GetMessageBrokerSettingsUnValidated()
     {
-        return MessageBrokerSettingsProvider.GetMessageBrokerSettingsPreValidated(configuration);
+        return MessageBrokerSettingsProvider.GetMessageBrokerSettingsUnValidated(configuration);
     }
 
-    protected ApplicationInsightsSettingsConfig GetApplicationInsightsSettingsPreValidated()
+    protected ApplicationInsightsSettingsConfig GetApplicationInsightsSettingsUnValidated()
     {
-        return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettingsPreValidated(configuration);
+        return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettingsUnValidated(configuration);
+    }
+
+    protected AzureAdSettingsConfig GetAzureAdSettingsUnValidated()
+    {
+        return AzureAdSettingsProvider.GetAzureAdSettingsUnValidated(configuration);
     }
 }
