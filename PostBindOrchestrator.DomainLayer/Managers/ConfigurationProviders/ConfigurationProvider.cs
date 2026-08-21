@@ -3,9 +3,14 @@ using PostBindOrchestrator.Core;
 
 namespace PostBindOrchestrator.DomainLayer;
 
-public class ConfigurationProvider
+public sealed class ConfigurationProvider
 {
     private readonly IConfiguration configuration;
+
+    private MessageBrokerSettings? messageBrokerSettings;
+    private AzureAdSettings? azureAdSettings;
+    private ApplicationInsightsSettings? applicationInsightsSettings;
+    private KeyVaultSettings? keyVaultSettings;
 
     public ConfigurationProvider(IConfiguration configuration) => this.configuration = configuration;
 
@@ -13,22 +18,22 @@ public class ConfigurationProvider
 
     public MessageBrokerSettings GetMessageBrokerSettings()
     {
-        return MessageBrokerSettingsProvider.GetMessageBrokerSettings(configuration);
+        return messageBrokerSettings ??= MessageBrokerSettingsProvider.GetMessageBrokerSettings(configuration);
     }
 
     public AzureAdSettings GetAzureAdSettings()
     {
-        return AzureAdSettingsProvider.GetAzureAdSettings(configuration);
+        return azureAdSettings ??= AzureAdSettingsProvider.GetAzureAdSettings(configuration);
     }
 
     public ApplicationInsightsSettings GetApplicationInsightsSettings()
     {
-        return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettings(configuration);
+        return applicationInsightsSettings ??= ApplicationInsightsSettingsProvider.GetApplicationInsightsSettings(configuration);
     }
 
     public KeyVaultSettings GetKeyVaultSettings()
     {
-        return KeyVaultSettingsProvider.GetKeyVaultSettings(configuration);
+        return keyVaultSettings ??= KeyVaultSettingsProvider.GetKeyVaultSettings(configuration);
     }
 
     public IConfiguration GetLoggingConfiguration()
@@ -39,20 +44,5 @@ public class ConfigurationProvider
     internal string? RetrieveConfigurationSettingValue(string key)
     {
         return configuration[key];
-    }
-
-    protected MessageBrokerSettingsConfig GetMessageBrokerSettingsUnValidated()
-    {
-        return MessageBrokerSettingsProvider.GetMessageBrokerSettingsUnValidated(configuration);
-    }
-
-    protected ApplicationInsightsSettingsConfig GetApplicationInsightsSettingsUnValidated()
-    {
-        return ApplicationInsightsSettingsProvider.GetApplicationInsightsSettingsUnValidated(configuration);
-    }
-
-    protected AzureAdSettingsConfig GetAzureAdSettingsUnValidated()
-    {
-        return AzureAdSettingsProvider.GetAzureAdSettingsUnValidated(configuration);
     }
 }

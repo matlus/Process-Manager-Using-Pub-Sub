@@ -41,7 +41,7 @@ public static class KeyVaultSettingsProvider
     ///    }
     /// </code>
     /// </example>
-    /// <param name="configurationRoot">The <see cref="IConfiguration"/></param>
+    /// <param name="configuration">The <see cref="IConfiguration"/> to read the settings from</param>
     /// <returns>A validated KeyVaultSettings instance</returns>
     public static KeyVaultSettings GetKeyVaultSettings(IConfiguration configuration)
     {
