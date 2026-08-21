@@ -24,8 +24,7 @@ public static class AzureAdSettingsProvider
     ///   }
     /// </code>
     /// </example>
-    /// <param name="configurationRoot">The <see cref="IConfiguration"/></param>
-    /// <param name="retrieveConfigurationSettingValueOrNull">A Func that returns the configuration setting value or null if the value is missing, empty or white spaces</param>
+    /// <param name="configuration">The <see cref="IConfiguration"/> to read the settings from</param>
     /// <returns>A validated AzureAdSettings instance</returns>
     public static AzureAdSettings GetAzureAdSettings(IConfiguration configuration)
     {

@@ -21,8 +21,7 @@ public static class MessageBrokerSettingsProvider
     ///   }
     /// </code>
     /// </example>
-    /// <param name="configurationRoot">The <see cref="IConfiguration"/></param>
-    /// <param name="retrieveConfigurationSettingValueOrNull">A Func that returns the configuration setting value or null if the value is missing, empty or white spaces</param>
+    /// <param name="configuration">The <see cref="IConfiguration"/> to read the settings from</param>
     /// <returns>A validated MessageBrokerSettings instance</returns>
     public static MessageBrokerSettings GetMessageBrokerSettings(IConfiguration configuration)
     {
@@ -50,8 +49,20 @@ public static class MessageBrokerSettingsProvider
     private static MessageBrokerType GetMessageBrokerType(IConfiguration configuration)
     {
         var value = configuration[$"{messageBrokerSettingsKey}:{messageBrokerTypePropertyName}"];
-        var messageBrokerTypeString = ValidatorString.GetValueOrNull(value) ?? MessageBrokerType.ServiceBus.ToString();
-        return (MessageBrokerType)Enum.Parse(typeof(MessageBrokerType), messageBrokerTypeString);
+        var messageBrokerTypeString = ValidatorString.GetValueOrNull(value);
+
+        if (messageBrokerTypeString is null)
+        {
+            return MessageBrokerType.ServiceBus;
+        }
+
+        if (!Enum.TryParse<MessageBrokerType>(messageBrokerTypeString, ignoreCase: true, out var messageBrokerType))
+        {
+            throw new MessageBrokerTypeNotSupportedException(
+                $"The configuration setting: \"{messageBrokerSettingsKey}:{messageBrokerTypePropertyName}\" has a value of: \"{messageBrokerTypeString}\" which is not a supported Message Broker type. Valid values are: {string.Join(", ", Enum.GetNames(typeof(MessageBrokerType)))}");
+        }
+
+        return messageBrokerType;
     }
 
     private static void Validate(MessageBrokerSettingsConfig messageBrokerSettingsConfig)
@@ -69,6 +80,5 @@ public static class MessageBrokerSettingsProvider
     private static void ValidateMessageBrokerSettingsConfig(StringBuilder errorMessages, MessageBrokerSettingsConfig messageBrokerSettingsConfig)
     {
         errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{messageBrokerSettingsKey}.{nameof(MessageBrokerSettings.ConnectionString)}", messageBrokerSettingsConfig.ConnectionString));
-        errorMessages.AppendLineIfNotNull(ValidatorString.Validate($"{messageBrokerSettingsKey}.{nameof(MessageBrokerSettings.MessageBrokerType)}", messageBrokerSettingsConfig.MessageBrokerType.ToString()));
     }
 }

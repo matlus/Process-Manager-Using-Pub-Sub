@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Configuration;
 
 namespace PostBindOrchestrator.Core;
 
@@ -10,15 +10,16 @@ public static class ApplicationInsightsSettingsProvider
     ///  
     /// </summary>
     /// <example>
-    /// In the appsettings.json file, the AppInsightsConnectionString section looks like the example code below.
+    /// In the appsettings.json file, the ApplicationInsights section looks like the example code below.
     /// This setting and/or the value is optional.
     /// <code>
-    ///   "AppInsightsConnectionString": "YourInstrumentationKey"
+    ///   "ApplicationInsights": {
+    ///       "ConnectionString": "YourConnectionString"
+    ///   }
     /// </code>
     /// </example>
-    /// <param name="configurationRoot">The <see cref="IConfigurationRoot"/></param>
-    /// <param name="retrieveConfigurationSettingValueOrNull">A Func that returns the configuration setting value or null if the value is missing, empty or white spaces</param>
-    /// <returns>A validated MessageBrokerSettings instance</returns>
+    /// <param name="configuration">The <see cref="IConfiguration"/> to read the settings from</param>
+    /// <returns>A validated ApplicationInsightsSettings instance</returns>
     public static ApplicationInsightsSettings GetApplicationInsightsSettings(IConfiguration configuration)
     {
         var applicationInsightsSettingsConfig = GetApplicationInsightsSettingsUnValidated(configuration);

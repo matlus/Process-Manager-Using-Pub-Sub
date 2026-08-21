@@ -1,21 +1,19 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using PostBindOrchestrator.Core;
 
 namespace PostBindOrchestrationTask.DomainLayer;
 
-public class ConfigurationProvider
+public sealed class ConfigurationProvider
 {
     private readonly IConfiguration configuration;
 
-    public ConfigurationProvider(IConfiguration configuration) => this.configuration = configuration;
+    private MessageBrokerSettings? messageBrokerSettings;
 
-    [ExcludeFromCodeCoverage]
-    internal ConfigurationProvider(IConfigurationRoot configurationRoot) => configuration = configurationRoot;
+    public ConfigurationProvider(IConfiguration configuration) => this.configuration = configuration;
 
     public MessageBrokerSettings GetMessageBrokerSettings()
     {
-        return MessageBrokerSettingsProvider.GetMessageBrokerSettings(configuration);
+        return messageBrokerSettings ??= MessageBrokerSettingsProvider.GetMessageBrokerSettings(configuration);
     }
 
     public IConfiguration GetLoggingConfiguration()
